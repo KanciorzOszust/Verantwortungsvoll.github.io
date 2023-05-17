@@ -102,6 +102,12 @@
         border-radius: 25px;
     }
 }
+* {
+    font-family: "Poppins", sans-serif;
+}
+*:focus {
+    outline: 2px black solid;
+}
 .displayNone {
     display: none !important;
 }
@@ -110,9 +116,6 @@
 }
 .backgroundTransparent {
     background-color: transparent !important;
-}
-* {
-    font-family: "Poppins", sans-serif;
 }
 html {
     scroll-behavior: smooth;
@@ -539,9 +542,9 @@ h4 {
 }
 .menuBox {
     backdrop-filter: blur(0.3125rem);
-    background-color: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     box-shadow: 0.125rem 0.125rem 0.375rem var(--big-shadow);
-    display: block;
+    display: none;
     height: 100%;
     left: -100%;
     list-style: none;

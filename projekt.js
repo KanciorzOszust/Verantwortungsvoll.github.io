@@ -50,19 +50,19 @@ class Canvas {
                     ctx.strokeStyle = "black";
                     if (this.maze[i][i2].walls.wallN) {
                         //ŚCIANA GÓRNA
-                        this.drawWallsPart(X, Y, X + cvs.width / this.col, Y)
+                        this.drawWallsPart(X, Y, X + cvs.width / this.col, Y);
                     }
                     if (this.maze[i][i2].walls.wallS) {
                         //ŚCIANA DOLNA
-                        this.drawWallsPart(X, parseInt(Y + cvs.height / this.row), parseInt(X + cvs.width / this.col),  Y + cvs.height / this.row)
+                        this.drawWallsPart(X, parseInt(Y + cvs.height / this.row), parseInt(X + cvs.width / this.col), Y + cvs.height / this.row);
                     }
                     if (this.maze[i][i2].walls.wallW) {
                         //ŚCIANA LEWA
-                        this.drawWallsPart(X, Y, X, Y + cvs.height / this.row)
+                        this.drawWallsPart(X, Y, X, Y + cvs.height / this.row);
                     }
                     if (this.maze[i][i2].walls.wallE) {
                         //ŚCIANA PRAWA
-                        this.drawWallsPart(X + cvs.width / this.col, Y, X + cvs.width / this.col, Y + cvs.height / this.row)
+                        this.drawWallsPart(X + cvs.width / this.col, Y, X + cvs.width / this.col, Y + cvs.height / this.row);
                     }
                 }
             }
@@ -71,10 +71,10 @@ class Canvas {
     }
 
     drawWallsPart(X1, Y1, X2, Y2) {
-        ctx.beginPath()
-        ctx.moveTo(X1, Y1)
-        ctx.lineTo(X2, Y2)
-        ctx.stroke()
+        ctx.beginPath();
+        ctx.moveTo(X1, Y1);
+        ctx.lineTo(X2, Y2);
+        ctx.stroke();
     }
 
     addNeighbors() {
@@ -87,7 +87,7 @@ class Canvas {
                 if (i === 0) this.maze[i][i2].neighbors.push(undefined);
                 else this.maze[i][i2].neighbors.push(this.maze[i - 1][i2]);
                 this.maze[i][i2].neighbors.push(this.maze[i][i2 + 1]);
-                
+
                 if (i === this.row - 1) this.maze[i][i2].neighbors.push(undefined);
                 else this.maze[i][i2].neighbors.push(this.maze[i + 1][i2]);
                 this.maze[i][i2].neighbors.push(this.maze[i][i2 - 1]);
@@ -175,7 +175,7 @@ class Canvas {
                     for (let i2 = 1; i2 < this.row - 1; i2++) {
                         for (let i3 = 1; i3 < this.col - 1; i3++) {
                             if (!this.maze[i2][i3].visited) {
-                                if (0 < i2 < this.col && 0 < i3 < this.row && this.maze[i2 - 1][i3].visited || this.maze[i2][i3 + 1].visited || this.maze[i2 + 1][i3].visited || this.maze[i2][i3 - 1].visited) {
+                                if ((0 < i2 < this.col && 0 < i3 < this.row && this.maze[i2 - 1][i3].visited) || this.maze[i2][i3 + 1].visited || this.maze[i2 + 1][i3].visited || this.maze[i2][i3 - 1].visited) {
                                     if (this.maze[i2 - 1][i3].visited) {
                                         currentPos = [i2 - 1, i3];
                                     } else if (this.maze[i2][i3 + 1].visited) {
@@ -186,7 +186,7 @@ class Canvas {
                                         currentPos = [i2, i3 - 1];
                                     }
                                     item.visited = true;
-                                    i2, i3 = 100;
+                                    i2, (i3 = 100);
                                 }
                             }
                         }
@@ -447,6 +447,9 @@ class Player {
                 await sleep(1);
             }
             updateLocalStorageMainInformations();
+            speakText(`obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, false);
+        } else {
+            speakText(`ściana blokuje ruch, obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, true);
         }
     }
 
@@ -461,6 +464,9 @@ class Player {
                 await sleep(1);
             }
             updateLocalStorageMainInformations();
+            speakText(`obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, false);
+        } else {
+            speakText(`ściana blokuje ruch, obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, true);
         }
     }
 
@@ -475,6 +481,9 @@ class Player {
                 await sleep(1);
             }
             updateLocalStorageMainInformations();
+            speakText(`obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, false);
+        } else {
+            speakText(`ściana blokuje ruch, obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, true);
         }
     }
 
@@ -490,6 +499,9 @@ class Player {
                 await sleep(1);
             }
             updateLocalStorageMainInformations();
+            speakText(`obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, false);
+        } else {
+            speakText(`ściana blokuje ruch, obecna pozycja X ${currentCell[1]}, Y ${currentCell[0]}`, true);
         }
     }
 
@@ -572,27 +584,27 @@ async function generateMaze() {
             await gra.mazeMain(tryby, modes);
             trybyMode = "DepthFirstSearch";
             levelHTML.innerHTML += "<span>Tryb generowania: DepthFirstSearch</span>";
-            break;    
+            break;
         case tryby[1].checked:
             await gra.sidewinder();
             trybyMode = "SideWinder";
             levelHTML.innerHTML += "<span>Tryb generowania: Sidewinder</span>";
-            break
+            break;
         case tryby[2].checked:
             await gra.mazeMain(tryby, modes);
             trybyMode = "Hunt-and-Kill";
             levelHTML.innerHTML += "<span>Tryb generowania: Hunt-and-Kill</span>";
-            break
+            break;
         case tryby[3].checked:
             await gra.aldousBroder();
             trybyMode = "Aldous-Broder";
             levelHTML.innerHTML += "<span>Tryb generowania: Aldous-Broder</span>";
-            break
+            break;
         case tryby[4].checked:
             await gra.eller();
             tryby = "Ellers Algorithm";
             levelHTML.innerHTML += "<span>Tryb generowania: Ellers Algorithm</span>";
-            break
+            break;
     }
 }
 
@@ -758,8 +770,8 @@ function updateGallery() {
                                     <span>${el.imageNumber}</span>
                                     <span>${el.gameDifficulty}</span>
                                     <span>${el.imageGeneration}</span>
-                                    <button class="removeImg">&times;</button>
-                                    <button class="mazeFromImg" title="Wczytaj">&#8681;</button>
+                                    <button class="removeImg" aria-label="Usuń zdjęcie">&times;</button>
+                                    <button class="mazeFromImg" title="Wczytaj" aria-label="Wczytaj labiryn ze zdjęcia">&#8681;</button>
                                 </div>
                               </div>`;
     });
@@ -877,6 +889,7 @@ function createToast(id, text) {
     //Tworzenie powiadomienia
     if (disableNotification.checked) return;
 
+    speakText(text, false);
     notifications.innerHTML = "<li></li>";
     const toast = document.querySelector(".notifications li");
     toast.className = `toast ${id}`;
@@ -960,11 +973,11 @@ function mainCreator() {
         customGame.drawWalls(ctx2);
         customPlayer.render2();
         customPlayer.renderEnd2();
-        setCreatorInputs()
+        setCreatorInputs();
 
         makingHistory = [];
         rewindMakingHistory = [];
-        updateLocalStorageCreatorInformations()
+        updateLocalStorageCreatorInformations();
         createToast("toastInfo", "Pomyślnie utworzono schemat");
     } else {
         createToast("toastError", "Nie wybrano poziomu");
@@ -1005,7 +1018,7 @@ function changePlayerPosition() {
     customPlayer.render2();
     customGame.drawWalls(ctx2);
     customPlayer.renderEnd2();
-    updateLocalStorageCreatorInformations()
+    updateLocalStorageCreatorInformations();
 }
 
 function changeEndPosition() {
@@ -1021,7 +1034,7 @@ function changeEndPosition() {
     customPlayer.render2();
     customGame.drawWalls(ctx2);
     customPlayer.renderEnd2();
-    updateLocalStorageCreatorInformations()
+    updateLocalStorageCreatorInformations();
 }
 
 function placeDeleteWalls(value1, value2, value3) {
@@ -1055,7 +1068,7 @@ function placeDeleteWalls(value1, value2, value3) {
     customGame.drawWalls(ctx2);
     customPlayer.render2();
     customPlayer.renderEnd2();
-    updateLocalStorageCreatorInformations()
+    updateLocalStorageCreatorInformations();
 }
 
 function exportMaze(asFile) {
@@ -1147,7 +1160,7 @@ function rewindHistoryMain(value, history) {
     customPlayer.render2();
     customGame.drawWalls(ctx2);
     customPlayer.renderEnd2();
-    updateLocalStorageCreatorInformations()
+    updateLocalStorageCreatorInformations();
 }
 
 function rewindHistoryFunction() {
@@ -1268,9 +1281,9 @@ function updateLocalStorageCreatorInformations() {
             customPlayerPositionY: customPlayerPositionY.value,
             customEndPositionX: customEndPositionX.value,
             customEndPositionY: customEndPositionY.value,
-        }
-        let stringifiedObject = stringifyObject(object)
-        localStorage.setItem("creatorInformations", stringifiedObject)
+        };
+        let stringifiedObject = stringifyObject(object);
+        localStorage.setItem("creatorInformations", stringifiedObject);
     }
 }
 
@@ -1321,32 +1334,32 @@ function getLocalStorageGalleryInformations() {
 }
 
 function getLocalStorageCreatorInformations() {
-    let creatorInformations = JSON.parse(localStorage.getItem("creatorInformations"))
-    customGame = new Canvas(creatorInformations.customGame.col, creatorInformations.customGame.row)
-    customGame.maze = creatorInformations.customGame.maze
-    customGame.addNeighbors()
-    customPlayer = new Player(creatorInformations.customPlayer.x, creatorInformations.customPlayer.y, creatorInformations.customPlayer.size)
-    customPlayerX = creatorInformations.customPlayerX
-    customPlayerY = creatorInformations.customPlayerY
+    let creatorInformations = JSON.parse(localStorage.getItem("creatorInformations"));
+    customGame = new Canvas(creatorInformations.customGame.col, creatorInformations.customGame.row);
+    customGame.maze = creatorInformations.customGame.maze;
+    customGame.addNeighbors();
+    customPlayer = new Player(creatorInformations.customPlayer.x, creatorInformations.customPlayer.y, creatorInformations.customPlayer.size);
+    customPlayerX = creatorInformations.customPlayerX;
+    customPlayerY = creatorInformations.customPlayerY;
     customInputs.forEach(function (e) {
         e.removeAttribute("disabled");
         e.setAttribute("max", customGame.col - 1);
     });
-    customPlayerPositionX.value = creatorInformations.customPlayerPositionX
-    customPlayerPositionY.value = creatorInformations.customPlayerPositionY
-    customEndPositionX.value = creatorInformations.customEndPositionX
-    customEndPositionY.value = creatorInformations.customEndPositionY
-    changePlayerPosition()
-    changeEndPosition()
-    makingHistory = creatorInformations.makingHistory
-    rewindMakingHistory = creatorInformations.rewindMakingHistory
-    customMode = creatorInformations.customMode
+    customPlayerPositionX.value = creatorInformations.customPlayerPositionX;
+    customPlayerPositionY.value = creatorInformations.customPlayerPositionY;
+    customEndPositionX.value = creatorInformations.customEndPositionX;
+    customEndPositionY.value = creatorInformations.customEndPositionY;
+    changePlayerPosition();
+    changeEndPosition();
+    makingHistory = creatorInformations.makingHistory;
+    rewindMakingHistory = creatorInformations.rewindMakingHistory;
+    customMode = creatorInformations.customMode;
 }
 
 function getLocalStorageInputStates() {
     let states = localStorage.getItem("states").split(",");
     inputCheckboxAndRadio.forEach(function (el) {
-        el.checked = (states[inputCheckboxAndRadioIndex] === "true")
+        el.checked = states[inputCheckboxAndRadioIndex] === "true";
         inputCheckboxAndRadioIndex++;
     });
 }
@@ -1356,7 +1369,7 @@ function getLocalStorage() {
     if (localStorage.getItem("savesInformations") != null) getLocalStorageSavesInformations();
     if (localStorage.getItem("galleryInformations") != null) getLocalStorageGalleryInformations();
     if (localStorage.getItem("states") != null) getLocalStorageInputStates();
-    if (localStorage.getItem("creatorInformations")!= null) getLocalStorageCreatorInformations()
+    if (localStorage.getItem("creatorInformations") != null) getLocalStorageCreatorInformations();
 }
 
 function localStorageMainFunction() {
@@ -1379,11 +1392,25 @@ function localStorageMainFunction() {
     }
 }
 
+function speakText(text, checkSpeaking) {
+    if (speakingMode.checked) {
+        if (!checkSpeaking) {
+            speaker.text = text;
+            synth.speak(speaker);
+        } else if (!synth.speaking) {
+            speaker.text = text;
+            synth.speak(speaker);
+        }
+    }
+}
+
 let cvs = document.querySelector("#game"); //1 canvas
 let ctx = cvs.getContext("2d");
 let cvs2 = document.querySelector("#game2"); //2 canvas
 let ctx2 = cvs2.getContext("2d");
 
+let menuToggle = document.querySelector("#menuToggle"); //przełącznik menu
+let menu = document.querySelector(".menuBox");
 let detailistInformations = document.querySelector(".subDetailistInformations span"); //Menu => informacje szczegółowe
 
 let time = document.querySelector(".time"); //Czas spędzony na poziomie:
@@ -1468,7 +1495,6 @@ let customModes = document.querySelectorAll("#customModes1 input"); //Poziom sch
 let customExportBtn = document.querySelector("#customExport"); //Exportowanie schematu
 let customGameBtn = document.querySelector("#customGame-start"); //-----------------
 let customGameBtnActive = 0; //----------------
-let menuToggle = document.querySelector("#menuToggle"); //przełącznik menu
 let scrollToGame = document.querySelectorAll(".menuA"); //scrolowanie do 1 canvasa
 
 let importedCustomGame = undefined; //wyeksportowana gra
@@ -1525,6 +1551,7 @@ let currentParentIndex = 0;
 let hasEventListener = false;
 
 let localStoragePopup = document.querySelector(".localStorage");
+let localStorageContainer = document.querySelector(".localStorageContainer");
 let declineLocalStorage = document.querySelector("#declineLocalStorage");
 let acceptLocalStorage = document.querySelector("#acceptLocalStorage");
 let deleteLocalStorage = document.querySelector("#deleteLocalStorage");
@@ -1532,11 +1559,18 @@ let deleteLocalStorage = document.querySelector("#deleteLocalStorage");
 let inputCheckboxAndRadio = document.querySelectorAll("input[type='checkbox'], input[type='radio']");
 let inputCheckboxAndRadioIndex = 0;
 
+let speakingMode = document.querySelector("#speakingMode");
+let speaker = new SpeechSynthesisUtterance();
+speaker.lang = "pl";
+speaker.rate = 1.75;
+let synth = window.speechSynthesis;
+
 document.addEventListener("DOMContentLoaded", function () {
     localStorageMainFunction();
     renderDetailistInformations();
 
     deleteLocalStorage.addEventListener("click", function () {
+        localStorageContainer.focus();
         localStorage.clear();
         localStorageMainFunction();
     });
@@ -1549,6 +1583,16 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             localStorage.setItem("states", states);
         });
+    });
+
+    menuToggle.addEventListener("change", function () {
+        if (menuToggle.checked) {
+            menuToggle.setAttribute("aria-expanded", true);
+            menu.classList.add("displayBlock");
+        } else {
+            menuToggle.setAttribute("aria-expanded", false);
+            menu.classList.remove("displayBlock");
+        }
     });
 
     refreshButton.addEventListener("click", function () {
@@ -1619,9 +1663,11 @@ document.addEventListener("DOMContentLoaded", function () {
             if (modes[2].checked && (tryby[0].checked || tryby[2].checked || tryby[3].checked) && !animatedGenerationInput.checked && !disableNotification.checked) {
                 warningBox.classList.remove("warningBoxRemoveAnimation");
                 warningBox.classList.add("warningBoxAddAnimation");
+                warningBox.setAttribute("aria-hidden", false);
             } else if (warningBox.classList.value.length > 15) {
                 warningBox.classList.remove("warningBoxAddAnimation");
                 warningBox.classList.add("warningBoxRemoveAnimation");
+                warningBox.setAttribute("aria-hidden", true);
             }
         });
     });
@@ -1629,6 +1675,7 @@ document.addEventListener("DOMContentLoaded", function () {
     warningBox.addEventListener("click", function () {
         warningBox.classList.remove("warningBoxAddAnimation");
         warningBox.classList.add("warningBoxRemoveAnimation");
+        warningBox.setAttribute("aria-hidden", true);
     });
 
     btn1.addEventListener("click", function () {
@@ -1777,6 +1824,8 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollToGame.forEach(function (el) {
         el.addEventListener("click", function () {
             menuToggle.checked = false;
+            menuToggle.setAttribute("aria-expanded", false);
+            menu.classList.remove("displayBlock");
         });
     });
 
@@ -1878,4 +1927,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-//wersja (korkociąg 9)
+//wersja (korkociąg 10)

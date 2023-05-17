@@ -10,13 +10,13 @@
     </head>
 
     <body>
-        <div class="warningBox">
+        <div class="warningBox" aria-hidden="true">
             <span>Uwaga: Generowanie może potrwać więcej czasu i spowoduje dużo większe obciążenie procesora</span>
             <i class="removeWarningBox">&times;</i>
         </div>
         <ul class="notifications"></ul>
         <div class="localStorage">
-            <div class="localStorageContainer">
+            <div class="localStorageContainer" tabindex="1">
                 <span>Czy chcesz czy by informacje byłe zapisywane w Local Storage?</span>
                 <div class="flex">
                     <button class="btn1" id="declineLocalStorage">Nie</button>
@@ -26,9 +26,9 @@
             </div>
         </div>
         <nav class="menu">
-            <input id="menuToggle" type="checkbox" tabindex="0" />
+            <input id="menuToggle" type="checkbox" tabindex="0" aria-label="menu" aria-expanded="false" />
             <label class="menuBtn" for="menuToggle">
-                <span></span>
+                <span aria-hidden="true"></span>
                 <div class="hoverToggle"></div>
             </label>
             <ul class="menuBox">
@@ -36,12 +36,14 @@
                 <li class="menuItem"><a class="menuA" href="#game">Gra</a></li>
                 <li class="menuItem"><a class="menuA" href="#game2">Kreator labiryntów</a></li>
                 <li class="menuItem"><a class="menuA" href="#gallerySection">Galeria</a></li>
-                <div class="detailistInformations" tabindex="0">
-                    <li class="menuItem"><span class="menuInnerBtn2">Informacje szczegółowe</span></li>
-                    <div class="subDetailistInformations" id="ok">
-                        <span></span>
+                <li class="menuItem">
+                    <div class="detailistInformations" tabindex="0">
+                        <span class="menuInnerBtn2">Informacje szczegółowe</span>
+                        <div class="subDetailistInformations" id="ok">
+                            <span></span>
+                        </div>
                     </div>
-                </div>
+                </li>
             </ul>
         </nav>
         <header>
@@ -58,15 +60,15 @@
                         <canvas class="game" width="1000" height="1000" id="game"></canvas>
                     </div>
                     <div>
-                        <button class="refreshButton" title="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności">&#8634;</button>
+                        <button class="refreshButton" title="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności" aria-label="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności">&#8634;</button>
                         <div class="hoverToggle"></div>
                     </div>
                 </div>
                 <div class="control">
-                    <button>&uarr;</button>
-                    <button>&larr;</button>
-                    <button>&darr;</button>
-                    <button>&rarr;</button>
+                    <button aria-label="Ruch w górę">&uarr;</button>
+                    <button aria-label="Ruch w lewo">&larr;</button>
+                    <button aria-label="Ruch w prawo">&darr;</button>
+                    <button aria-label="Ruch w dół">&rarr;</button>
                 </div>
                 <p class="infoPC">Do kontrolowania kulki używaj STRZAŁEK lub klawiszy W, S, A, D</p>
                 <button class="btn1" id="modifyMaze">Modyfikuj</button>
@@ -127,6 +129,15 @@
                                 <span>Animowane generowanie</span>
                                 <span class="checkboxContainer">
                                     <input type="checkbox" name="animatedGeneration" id="animatedGeneration" />
+                                    <i></i>
+                                </span>
+                            </label>
+                        </div>
+                        <div>
+                            <label for="speakingMode">
+                                <span>Informacje mówione</span>
+                                <span class="checkboxContainer">
+                                    <input type="checkbox" name="speakingMode" id="speakingMode" />
                                     <i></i>
                                 </span>
                             </label>
@@ -405,7 +416,7 @@
                 <section id="gallerySection">
                     <div class="flex-column">
                         <span class="headerLike">Galeria</span>
-                        <div class="utrudnienia5-content">
+                        <div>
                             <label for="transparentBackground">
                                 <span>Transparentne tło</span>
                                 <span class="checkboxContainer">
@@ -417,9 +428,9 @@
                     </div>
                     <div class="gallery"></div>
                     <dialog class="popupImages">
-                        <button class="offButton">&times;</button>
-                        <button class="leftButton">&#8592;</button>
-                        <button class="rightButton">&#8594;</button>
+                        <button class="offButton" aria-label="Zamknij galerie">&times;</button>
+                        <button class="leftButton" aria-label="Poprzednie zdjęcie">&#8592;</button>
+                        <button class="rightButton" aria-label="Następne zdjęcie">&#8594;</button>
                         <img src="//:0" alt="Obecne zdjęcie" />
                     </dialog>
                 </section>
