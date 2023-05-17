@@ -50,36 +50,31 @@ class Canvas {
                     ctx.strokeStyle = "black";
                     if (this.maze[i][i2].walls.wallN) {
                         //ŚCIANA GÓRNA
-                        ctx.beginPath();
-                        ctx.moveTo(X, Y); // X TAKI SAM, Y TAKI SAM
-                        ctx.lineTo(X + cvs.width / this.col, Y); //X ZMIENIA SIE O JEDEN CELL, Y JEST TAKI SAM
-                        ctx.stroke();
+                        this.drawWallsPart(X, Y, X + cvs.width / this.col, Y)
                     }
                     if (this.maze[i][i2].walls.wallS) {
                         //ŚCIANA DOLNA
-                        ctx.beginPath();
-                        ctx.moveTo(X, parseInt(Y + cvs.height / this.row)); // X TAKI SAM, Y PRZESUNIĘTY O JEDEN CELL
-                        ctx.lineTo(parseInt(X + cvs.width / this.col), Y + cvs.height / this.row); // X PRZEUNIĘTY O JEDEN CELL, Y PRZESUNIĘTY O JDEDN SELL
-                        ctx.stroke();
+                        this.drawWallsPart(X, parseInt(Y + cvs.height / this.row), parseInt(X + cvs.width / this.col),  Y + cvs.height / this.row)
                     }
                     if (this.maze[i][i2].walls.wallW) {
                         //ŚCIANA LEWA
-                        ctx.beginPath();
-                        ctx.moveTo(X, Y);
-                        ctx.lineTo(X, Y + cvs.height / this.row); //Y PRZESUNIĘTY O JEDEN CELL
-                        ctx.stroke();
+                        this.drawWallsPart(X, Y, X, Y + cvs.height / this.row)
                     }
                     if (this.maze[i][i2].walls.wallE) {
                         //ŚCIANA PRAWA
-                        ctx.beginPath();
-                        ctx.moveTo(X + cvs.width / this.col, Y); // X PRZESUNIĘTY O JEDEN CELL
-                        ctx.lineTo(X + cvs.width / this.col, Y + cvs.height / this.row); //X I Y PRZESUNIĘTY O JEDEN CELL
-                        ctx.stroke();
+                        this.drawWallsPart(X + cvs.width / this.col, Y, X + cvs.width / this.col, Y + cvs.height / this.row)
                     }
                 }
             }
         }
         renderDetailistInformations();
+    }
+
+    drawWallsPart(X1, Y1, X2, Y2) {
+        ctx.beginPath()
+        ctx.moveTo(X1, Y1)
+        ctx.lineTo(X2, Y2)
+        ctx.stroke()
     }
 
     addNeighbors() {
@@ -89,17 +84,12 @@ class Canvas {
         });
         for (let i = 0; i < this.row; i++) {
             for (let i2 = 0; i2 < this.col; i2++) {
-                if (i === 0) {
-                    this.maze[i][i2].neighbors.push(undefined);
-                } else {
-                    this.maze[i][i2].neighbors.push(this.maze[i - 1][i2]);
-                }
+                if (i === 0) this.maze[i][i2].neighbors.push(undefined);
+                else this.maze[i][i2].neighbors.push(this.maze[i - 1][i2]);
                 this.maze[i][i2].neighbors.push(this.maze[i][i2 + 1]);
-                if (i === this.row - 1) {
-                    this.maze[i][i2].neighbors.push(undefined);
-                } else {
-                    this.maze[i][i2].neighbors.push(this.maze[i + 1][i2]);
-                }
+                
+                if (i === this.row - 1) this.maze[i][i2].neighbors.push(undefined);
+                else this.maze[i][i2].neighbors.push(this.maze[i + 1][i2]);
                 this.maze[i][i2].neighbors.push(this.maze[i][i2 - 1]);
             }
         }
@@ -182,24 +172,22 @@ class Canvas {
                         } catch (error) {}
                     }
                 } else {
-                    for (let i2 = 0; i2 < this.row; i2++) {
-                        for (let i3 = 0; i3 < this.col; i3++) {
+                    for (let i2 = 1; i2 < this.row - 1; i2++) {
+                        for (let i3 = 1; i3 < this.col - 1; i3++) {
                             if (!this.maze[i2][i3].visited) {
-                                try {
-                                    if (this.maze[i2 - 1][i3].visited || this.maze[i2][i3 + 1].visited || this.maze[i2 + 1][i3].visited || this.maze[i2][i3 - 1].visited) {
-                                        if (this.maze[i2 - 1][i3].visited) {
-                                            currentPos = [i2 - 1, i3];
-                                        } else if (this.maze[i2][i3 + 1].visited) {
-                                            currentPos = [i2, i3 + 1];
-                                        } else if (this.maze[i2 + 1][i3].visited) {
-                                            currentPos = [i2 + 1, i3];
-                                        } else if (this.maze[i2][i3 - 1].visited) {
-                                            currentPos = [i2, i3 - 1];
-                                        }
-                                        item.visited = true;
-                                        i2, (i3 = 100);
+                                if (0 < i2 < this.col && 0 < i3 < this.row && this.maze[i2 - 1][i3].visited || this.maze[i2][i3 + 1].visited || this.maze[i2 + 1][i3].visited || this.maze[i2][i3 - 1].visited) {
+                                    if (this.maze[i2 - 1][i3].visited) {
+                                        currentPos = [i2 - 1, i3];
+                                    } else if (this.maze[i2][i3 + 1].visited) {
+                                        currentPos = [i2, i3 + 1];
+                                    } else if (this.maze[i2 + 1][i3].visited) {
+                                        currentPos = [i2 + 1, i3];
+                                    } else if (this.maze[i2][i3 - 1].visited) {
+                                        currentPos = [i2, i3 - 1];
                                     }
-                                } catch (error) {}
+                                    item.visited = true;
+                                    i2, i3 = 100;
+                                }
                             }
                         }
                     }
@@ -579,26 +567,32 @@ function timerFunction() {
 }
 
 async function generateMaze() {
-    if (tryby[0].checked) {
-        await gra.mazeMain(tryby, modes);
-        trybyMode = "DepthFirstSearch";
-        levelHTML.innerHTML += "<span>Tryb generowania: DepthFirstSearch</span>";
-    } else if (tryby[1].checked) {
-        await gra.sidewinder();
-        trybyMode = "SideWinder";
-        levelHTML.innerHTML += "<span>Tryb generowania: Sidewinder</span>";
-    } else if (tryby[2].checked) {
-        await gra.mazeMain(tryby, modes);
-        trybyMode = "Hunt-and-Kill";
-        levelHTML.innerHTML += "<span>Tryb generowania: Hunt-and-Kill</span>";
-    } else if (tryby[3].checked) {
-        await gra.aldousBroder();
-        trybyMode = "Aldous-Broder";
-        levelHTML.innerHTML += "<span>Tryb generowania: Aldous-Broder</span>";
-    } else if (tryby[4].checked) {
-        await gra.eller();
-        tryby = "Ellers Algorithm";
-        levelHTML.innerHTML += "<span>Tryb generowania: Ellers Algorithm</span>";
+    switch (true) {
+        case tryby[0].checked:
+            await gra.mazeMain(tryby, modes);
+            trybyMode = "DepthFirstSearch";
+            levelHTML.innerHTML += "<span>Tryb generowania: DepthFirstSearch</span>";
+            break;    
+        case tryby[1].checked:
+            await gra.sidewinder();
+            trybyMode = "SideWinder";
+            levelHTML.innerHTML += "<span>Tryb generowania: Sidewinder</span>";
+            break
+        case tryby[2].checked:
+            await gra.mazeMain(tryby, modes);
+            trybyMode = "Hunt-and-Kill";
+            levelHTML.innerHTML += "<span>Tryb generowania: Hunt-and-Kill</span>";
+            break
+        case tryby[3].checked:
+            await gra.aldousBroder();
+            trybyMode = "Aldous-Broder";
+            levelHTML.innerHTML += "<span>Tryb generowania: Aldous-Broder</span>";
+            break
+        case tryby[4].checked:
+            await gra.eller();
+            tryby = "Ellers Algorithm";
+            levelHTML.innerHTML += "<span>Tryb generowania: Ellers Algorithm</span>";
+            break
     }
 }
 
@@ -1212,64 +1206,72 @@ function localStorageCSSManipulation() {
 }
 
 function updateLocalStorageMainInformations() {
-    let object = {
-        gra: gra,
-        gracz: gracz,
-        gameDifficulty: customMode,
-        currentCellX: currentCell[0],
-        currentCellY: currentCell[1],
-        endPositionX: koniecX,
-        endPositionY: koniecY,
-        sec: sec,
-        m: m,
-        currentLevel: modesMode,
-        currentGeneration: trybyMode,
-        currentRandomEndPos: [gracz.endPositionX, gracz.endPositionY],
-        widocznoscValue: widocznoscValue,
-        niewidocznyKoniecValue: niewidocznyKoniecValue,
-        odwroconeSterowanieValue: odwroconeSterowanieValue,
-        niewidoczneScianyValue: niewidoczneScianyValue,
-        niewidocznyGraczValue: niewidocznyGraczValue,
-        finalMultiplier: finalMultiplier,
-    };
-    let stringifiedObject = stringifyObject(object);
-    localStorage.setItem("gameInformations", stringifiedObject);
+    if (localStorage.getItem("accept")) {
+        let object = {
+            gra: gra,
+            gracz: gracz,
+            gameDifficulty: customMode,
+            currentCellX: currentCell[0],
+            currentCellY: currentCell[1],
+            endPositionX: koniecX,
+            endPositionY: koniecY,
+            sec: sec,
+            m: m,
+            currentLevel: modesMode,
+            currentGeneration: trybyMode,
+            currentRandomEndPos: [gracz.endPositionX, gracz.endPositionY],
+            widocznoscValue: widocznoscValue,
+            niewidocznyKoniecValue: niewidocznyKoniecValue,
+            odwroconeSterowanieValue: odwroconeSterowanieValue,
+            niewidoczneScianyValue: niewidoczneScianyValue,
+            niewidocznyGraczValue: niewidocznyGraczValue,
+            finalMultiplier: finalMultiplier,
+        };
+        let stringifiedObject = stringifyObject(object);
+        localStorage.setItem("gameInformations", stringifiedObject);
+    }
 }
 
 function updateLocalStorageSavesInformations() {
-    let object = {
-        saves: saves,
-        gameNumber: gameHistoryIndex,
-    };
-    let stringifiedObject = stringifyObject(object);
-    localStorage.setItem("savesInformations", stringifiedObject);
+    if (localStorage.getItem("accept")) {
+        let object = {
+            saves: saves,
+            gameNumber: gameHistoryIndex,
+        };
+        let stringifiedObject = stringifyObject(object);
+        localStorage.setItem("savesInformations", stringifiedObject);
+    }
 }
 
 function updateLocalStorageGalleryInformations() {
-    let object = {
-        listOfImages: listOfImages,
-        gameIndex: gameIndex,
-    };
-    let stringifiedObject = stringifyObject(object);
-    localStorage.setItem("galleryInformations", stringifiedObject);
+    if (localStorage.getItem("accept")) {
+        let object = {
+            listOfImages: listOfImages,
+            gameIndex: gameIndex,
+        };
+        let stringifiedObject = stringifyObject(object);
+        localStorage.setItem("galleryInformations", stringifiedObject);
+    }
 }
 
 function updateLocalStorageCreatorInformations() {
-    let object = {
-        customGame: customGame,
-        customPlayer: customPlayer,
-        customPlayerX: customPlayerX,
-        customPlayerY: customPlayerY,
-        makingHistory: makingHistory,
-        rewindMakingHistory: rewindMakingHistory,
-        customMode: customMode,
-        customPlayerPositionX: customPlayerPositionX.value,
-        customPlayerPositionY: customPlayerPositionY.value,
-        customEndPositionX: customEndPositionX.value,
-        customEndPositionY: customEndPositionY.value,
+    if (localStorage.getItem("accept")) {
+        let object = {
+            customGame: customGame,
+            customPlayer: customPlayer,
+            customPlayerX: customPlayerX,
+            customPlayerY: customPlayerY,
+            makingHistory: makingHistory,
+            rewindMakingHistory: rewindMakingHistory,
+            customMode: customMode,
+            customPlayerPositionX: customPlayerPositionX.value,
+            customPlayerPositionY: customPlayerPositionY.value,
+            customEndPositionX: customEndPositionX.value,
+            customEndPositionY: customEndPositionY.value,
+        }
+        let stringifiedObject = stringifyObject(object)
+        localStorage.setItem("creatorInformations", stringifiedObject)
     }
-    let stringifiedObject = stringifyObject(object)
-    localStorage.setItem("creatorInformations", stringifiedObject)
 }
 
 function getLocalStorageMainInformations() {
