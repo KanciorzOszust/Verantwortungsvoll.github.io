@@ -2,458 +2,428 @@
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
 }
-
 @keyframes showToast {
     0% {
         transform: translateX(100%);
     }
-
     40% {
         transform: translateX(-5%);
     }
-
     80% {
         transform: translateX(0%);
     }
-
     100% {
         transform: translateX(-0.625rem);
     }
 }
-
 @keyframes deleteToast {
     0% {
         transform: translateX(-0.625rem);
     }
-
     40% {
         transform: translateX(0%);
     }
-
     80% {
         transform: translateX(-5%);
     }
-
     100% {
         transform: translateX(calc(100% + 1.25rem));
     }
 }
-
 @keyframes progress {
     100% {
         width: 0%;
     }
 }
-
 @keyframes showError {
     0% {
         top: -100%;
     }
-
     75% {
         top: 2.5%;
     }
-
     100% {
         top: 1%;
     }
 }
-
 @keyframes removeError {
     0% {
         top: 1%;
     }
-
     25% {
         top: 2.5%;
     }
-
     100% {
         top: -100%;
     }
 }
-
+@keyframes fromBottomToUp {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
+@keyframes fromTopToBottom {
+    0% {
+        transform: translateY(0%);
+    }
+    100% {
+        transform: translateY(150%);
+    }
+}
 :root {
     --big-shadow: rgba(0, 0, 0, 0.3);
     --small-shadow: rgba(0, 0, 0, 0.1);
-    --toast-info-color: #e9bd0c;
     --toast-error-color: #e24d4c;
+    --toast-info-color: #e9bd0c;
     --toast-win-color: #0abf30;
+
+    --hover-grey-02: rgba(128, 128, 128, 0.2);
 }
-
 @supports selector(::-webkit-scrollbar) and selector(::-webkit-scrollbar-track) and selector(::-webkit-scrollbar-thumb) {
-    ::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: rgba(128, 128, 128, 0.55);
-        border-radius: 5rem;
-        height: 50%;
-    }
-
     ::-webkit-scrollbar-thumb:hover {
         background-color: rgba(128, 128, 128, 0.25);
     }
-}
 
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(128, 128, 128, 0.55);
+        border-radius: 25px;
+    }
+}
+* {
+    font-family: "Poppins", sans-serif;
+}
+*:focus {
+    outline: 2px black solid;
+}
 .displayNone {
     display: none !important;
 }
-
 .displayBlock {
     display: block !important;
 }
-
 .backgroundTransparent {
     background-color: transparent !important;
 }
-
 html {
     scroll-behavior: smooth;
 }
-
+button {
+    background-color: transparent;
+    border: 0 transparent solid;
+}
 .site {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
-
 :where(header, #modes2) img {
     position: absolute;
-    top: 0.3125rem;
     right: 0.3125rem;
+    top: 0.3125rem;
     width: 10%;
 }
-
 header img:hover {
     opacity: 0;
     transition-duration: 0.5s;
 }
-
 h1 {
     font-size: 4rem;
     margin-bottom: 2rem;
 }
-
 hr {
     width: 100%;
 }
-
 .level,
 .time {
     font-size: 1.5rem;
-    margin-top: 2rem;
     margin-bottom: 1rem;
+    margin-top: 2rem;
     text-align: center;
 }
-
 .level {
     display: flex;
     flex-direction: column;
 }
-
 .canvas {
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-name: fadein;
     display: flex;
     justify-content: center;
     opacity: 0;
-    animation-name: fadein;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
 }
-
 .refreshButton {
-    font-size: 1.5625rem;
-    position: relative;
-    left: 86%;
+    border-radius: 100%;
     cursor: pointer;
+    display: block;
+    font-size: 1.5625rem;
+    left: 86%;
+    position: relative;
+    text-align: center;
+    width: 2rem;
 }
-
+.refreshButton:hover {
+    background-color: var(--hover-grey-02);
+}
 .game {
+    background-color: #f5f5f5;
     background-color: #fff;
+    border: 0.125rem #000 solid;
     box-shadow: 0.3125rem 0.3125rem 1.25rem var(--big-shadow);
     box-sizing: border-box;
-    border: 0.125rem #000 solid;
-    background-color: #f5f5f5;
     width: 70%;
 }
-
 #modes2 div div:nth-child(2) {
-    z-index: 2;
-    position: relative;
     left: 40%;
+    position: relative;
+    z-index: 2;
 }
-
 #modes2 img {
     display: none;
     width: 9.375rem;
     z-index: 2;
 }
-
 #modes2 div:hover img {
     display: inline-block;
 }
-
 .control {
     display: none;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
     margin: 2rem;
     width: 50%;
 }
-
 .control button:first-child {
     margin: 0 37.5% 0 37.5%;
 }
-
 .control button {
-    display: inline-block;
-    padding: 0.625rem 1.25rem;
     background-image: linear-gradient(to bottom right, #3498db, #1abc9c);
     border-radius: 1.25rem;
     color: #fff;
+    display: inline-block;
     font-size: 1.25rem;
     font-weight: bold;
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.2s;
-    margin: 0.1875rem 0.1875rem 0.1875rem 0.1875rem;
-    width: 25%;
     height: 3.125rem;
+    margin: 0.1875rem 0.1875rem 0.1875rem 0.1875rem;
+    padding: 0.625rem 1.25rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    width: 25%;
 }
-
 .control button:hover {
-    transform: scale(1.1);
     background-color: #005fa3;
     cursor: pointer;
+    transform: scale(1.1);
 }
-
 #utrudnienia {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin: 2rem;
 }
-
 #utrudnienia div {
     margin: 1rem 0;
 }
-
 #utrudnienia label {
     font-size: 1.5rem;
     margin-right: 1rem;
 }
-
 #utrudnienia input[type="range"] {
     width: 80%;
 }
-
 #utrudnienia .ok {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
-
 #utrudnienia .ok div {
-    display: flex;
     align-items: center;
+    display: flex;
 }
-
 #utrudnienia span {
     font-size: 1.5rem;
 }
-
 .utrudnieniaInformation {
     text-align: center;
 }
-
 .flex,
 .importFileBtnContainer {
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
     margin: 2rem;
 }
-
 .flex label {
     font-size: 1.5rem;
     margin-right: 1rem;
 }
-
 input[type="radio"] {
-    transform: scale(1.5);
     margin-right: 1rem;
+    transform: scale(1.5);
 }
-
 input[type="checkbox"] {
     appearance: none;
+    border-radius: 100%;
 }
-
 .checkboxContainer i {
-    display: inline-block;
-    position: relative;
-    width: 1.875rem;
-    height: 0.9375rem;
     background-color: #ddd;
     border-radius: 0.9375rem;
+    display: inline-block;
+    height: 0.9375rem;
+    position: relative;
+    width: 1.875rem;
 }
-
 :where(.additionalOptions, .disableInputRewindContainer) .checkboxContainer i {
     top: 0.1563rem;
 }
-
 input[type="checkbox"]:checked ~ i {
     background-color: #2aa0ff;
 }
-
 .checkboxContainer i::before {
+    background-color: #fff;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.125rem 0.25rem var(--small-shadow);
     content: "";
+    height: 0.625rem;
+    left: 0.1563rem;
     position: absolute;
     top: 0.1563rem;
-    left: 0.1563rem;
-    width: 0.625rem;
-    height: 0.625rem;
-    border-radius: 0.625rem;
-    background-color: #ffffff;
-    box-shadow: 0 0.125rem 0.25rem var(--small-shadow);
     transition: 0.5s;
+    width: 0.625rem;
 }
-
 input[type="checkbox"]:checked ~ i::before {
     left: calc(100% - 0.7813rem);
 }
-
+input[type="checkbox"]:focus {
+    border: 0.125rem #000 solid;
+}
 .mode2label,
 .mode2,
 .mode3label {
     margin-right: 1rem;
 }
-
 .submit {
     display: flex;
     justify-content: center;
     margin: 2rem;
 }
-
 .btn1 {
-    display: inline-block;
-    padding: 0.625rem 1.25rem;
-    background-image: linear-gradient(to bottom right, #3498db, #1abc9c);
-    border-radius: 1.25rem;
+    background-color: #111827;
+    border-radius: 0.75rem;
+    border: 1px solid transparent;
+    box-sizing: border-box;
     color: #fff;
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.2s;
     cursor: pointer;
-    margin: 0.625rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    margin: 0.75rem;
+    padding: 0.75rem 1.2rem;
+    text-align: center;
+    text-decoration: none #6b7280 solid;
+    touch-action: manipulation;
+    transition-duration: 0.2s;
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    width: auto;
 }
-
-.btn1:hover,
-.deleteBtn:hover {
-    transform: scale(1.1);
+.btn1:hover {
+    background-color: #374151;
 }
-
+.btn1:focus {
+    text-decoration: underline;
+}
 h1,
 h3,
 h4 {
     text-align: center;
 }
-
 .h4 {
     margin-bottom: 3.125rem;
 }
-
 .content {
+    align-items: center;
     background-color: #fff;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem var(--big-shadow);
-    width: 90vw;
-    max-height: 13.5rem;
-    overflow-y: auto;
-    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    max-height: 14.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 90vw;
 }
-
 .part {
-    font-size: 1.17rem;
-    display: flex;
-    padding: 0.625rem;
     background-color: #f3f1f1;
     border: 0.0625rem var(--small-shadow) solid;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem var(--big-shadow);
+    display: flex;
+    font-size: 1.17rem;
     margin: 0.625rem;
+    padding: 0.625rem;
     width: auto;
 }
-
 .part:hover {
     border: 0.0625rem #f00 solid;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem #f00;
 }
-
 .deleteBtn {
-    color: #aeb0d7;
-    margin-left: auto;
     cursor: pointer;
+    font-size: 1.5rem;
+    margin-left: auto;
 }
-
 .deleteBtn:hover {
     color: #34495e;
 }
-
-.saveBtn {
-    border-radius: 25px;
-    border-color: var(--small-shadow);
-    box-shadow: var(--big-shadow);
+.part .btn1 {
+    font-size: 0.5rem;
+    line-height: 0;
+    margin: 0 1rem;
 }
-
 #rotate {
+    background-color: #fff;
+    border-radius: 0.3125rem;
+    border: 0.125rem solid #ccc;
+    box-shadow: 0 0.125rem 0.125rem var(--small-shadow);
+    color: #555;
     font-family: Arial, sans-serif;
     font-size: 1rem;
-    padding: 0.625rem;
     margin-right: 0.625rem;
-    border: 0.125rem solid #ccc;
-    border-radius: 0.3125rem;
-    background-color: #fff;
-    color: #555;
+    padding: 0.625rem;
     width: 12.5rem;
-    box-shadow: 0 0.125rem 0.125rem var(--small-shadow);
 }
-
 #rotate:hover {
     border-color: #aaa;
 }
-
 #rotate:focus {
-    outline: none;
     border-color: #66afe9;
     box-shadow: 0 0 0.3125rem rgba(102, 175, 233, 0.5);
+    outline: none;
 }
-
 #rotate option {
     font-size: 1rem;
     padding: 0.625rem;
 }
-
 .flex-column {
-    display: flex;
-    justify-content: center;
     align-items: center;
+    display: flex;
     flex-direction: column;
+    justify-content: center;
 }
-
 #playerPositionX,
 #playerPositionY,
 #endPositionX,
@@ -461,542 +431,487 @@ h4 {
     margin: 0.625rem;
     text-align: center;
 }
-
 .notifications {
-    font-family: "Poppins", sans-serif;
     position: fixed;
-    z-index: 3;
-    top: 1.875rem;
     right: 1.25rem;
+    top: 1.875rem;
+    z-index: 3;
 }
-
 .notifications :where(.toast, .column) {
-    display: flex;
     align-items: center;
+    display: flex;
 }
-
 .notifications .toast {
-    width: 40vw;
-    position: relative;
-    overflow: hidden;
-    list-style: none;
-    border-radius: 0.25rem;
-    padding: 1rem 1.0625rem;
-    margin-bottom: 0.625rem;
+    animation: showToast 0.3s ease forwards;
     background: #fff;
+    border-radius: 0.25rem;
     border: 0.0625rem var(--small-shadow) solid;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem var(--big-shadow);
     justify-content: space-between;
-    animation: showToast 0.3s ease forwards;
+    list-style: none;
+    margin-bottom: 0.625rem;
+    overflow: hidden;
+    padding: 1rem 1.0625rem;
+    position: relative;
+    width: 40vw;
 }
-
 .notifications .toast.hide {
     animation: deleteToast 0.3s ease forwards;
 }
-
 .toast::before {
-    position: absolute;
+    animation: progress 3s linear forwards;
+    bottom: 0;
     content: "";
     height: 0.1875rem;
-    width: 100%;
-    bottom: 0;
     left: 0;
-    animation: progress 3s linear forwards;
+    position: absolute;
+    width: 100%;
 }
-
 .toastWin::before {
     background: var(--toast-win-color);
 }
-
 .toastError::before {
     background: var(--toast-error-color);
 }
-
 .toastInfo::before {
     background: var(--toast-info-color);
 }
-
 .toast .column i {
     font-size: 1.75rem;
 }
-
-.toastWin .column i {
-    color: var(--toast-win-color);
-}
-
-.toastError .column i {
-    color: var(--toast-error-color);
-}
-
-.toastInfo .column i {
-    color: var(--toast-info-color);
-}
-
 .toast .column span {
     font-size: 1.07rem;
     margin-left: 0.75rem;
 }
-
 .toast i:last-child {
     color: #aeb0d7;
     cursor: pointer;
 }
-
 .toast i:last-child:hover {
     color: #34495e;
 }
-
 .animatedSolveDelayContainer {
     display: none;
 }
-
 #menuToggle {
-    position: fixed;
-    top: 1.25rem;
     left: 1.25rem;
     opacity: 0;
+    position: fixed;
+    top: 1.25rem;
 }
-
 #menuToggle:checked + .menuBtn > span {
     transform: rotate(45deg);
 }
-
 #menuToggle:checked + .menuBtn > span::before {
     top: 0;
     transform: rotate(0deg);
 }
-
 #menuToggle:checked + .menuBtn > span::after {
     top: 0;
     transform: rotate(90deg);
 }
-
 #menuToggle:checked ~ .menuBox {
     left: 0;
 }
-
 .menuBtn {
+    cursor: pointer;
+    height: 1.625rem;
+    left: 1.25rem;
     position: fixed;
     top: 1.25rem;
-    left: 1.25rem;
     width: 1.625rem;
-    height: 1.625rem;
-    cursor: pointer;
     z-index: 3;
 }
-
 .menuBtn > span,
 .menuBtn > span::before,
 .menuBtn > span::after {
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 0.125rem;
     background-color: #616161;
+    display: block;
+    height: 0.125rem;
+    position: absolute;
     transition-duration: 0.25s;
+    width: 100%;
 }
-
 .menuBtn > span::before {
     content: "";
     top: -0.5rem;
 }
-
 .menuBtn > span::after {
     content: "";
     top: 0.5rem;
 }
-
 .menuBox {
-    z-index: 2;
-    display: block;
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 21.875rem;
+    backdrop-filter: blur(0.3125rem);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    box-shadow: 0.125rem 0.125rem 0.375rem var(--big-shadow);
     height: 100%;
+    left: -100%;
+    list-style: none;
     margin: 0;
     padding: 5rem 0;
-    list-style: none;
-    background-color: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    backdrop-filter: blur(0.3125rem);
-    box-shadow: 0.125rem 0.125rem 0.375rem var(--big-shadow);
+    position: fixed;
+    top: 0;
     transition-duration: 0.25s;
+    width: 21.875rem;
+    z-index: 2;
 }
-
-.menuItem {
+.menuItem,
+.menuItem button {
     display: block;
-    padding: 0.75rem 1.5rem;
     font-family: "Roboto", sans-serif;
     font-size: 1.25rem;
     font-weight: 600;
+    padding: 0.75rem 1.5rem;
     transition-duration: 0.25s;
 }
-
 :where(.menuItem, .menuInnerBtn):hover {
-    background-color: rgba(128, 128, 128, 0.2);
+    background-color: var(--hover-grey-02);
 }
-
+.menuItem button {
+    cursor: pointer;
+    padding: 0;
+}
 .menuA {
-    display: block;
     color: #333;
+    display: block;
     text-decoration: none;
 }
-
 .menuInnerBtn {
+    cursor: pointer;
     font-size: 0.9375rem;
-    cursor: pointer;
 }
-
 .menuInnerBtn2 {
-    font-size: 1.25rem;
     cursor: pointer;
+    font-size: 1.25rem;
 }
-
-.info li::after {
-    content: "";
-    display: inline-block;
-    background-image: url(img/icons8-sort-down-20.png);
-    background-size: 1.25rem;
-    width: 1.25rem;
-    height: 1.25rem;
-}
-
-.info > li::after {
-    transform: rotate(0deg);
-}
-
-.detailistInformations li::after {
-    transform: rotate(0deg);
-}
-
 .subInfo {
     display: none;
 }
-
 .info:hover .subInfo {
     display: block;
 }
-
 .menuFlex {
     display: flex;
 }
-
+.detailistInformations li::after {
+    background-image: url(img/icons8-sort-down-20.png);
+    background-size: 1.25rem;
+    content: "";
+    display: inline-block;
+    height: 1.25rem;
+    width: 1.25rem;
+}
 .subDetailistInformations {
     display: none;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
     overflow-y: auto;
+    text-align: center;
 }
-
 .subDetailistInformations span {
-    font-size: 1.25rem;
     color: #333;
     font-family: "Roboto", sans-serif;
+    font-size: 1.25rem;
     font-weight: 600;
-    margin: 0.1563rem 0 0.1563rem 0;
-    height: calc(100vh - 30.3rem);
+    height: calc(100vh - 18rem);
+    margin: 0.1563rem 0;
 }
-
-.detailistInformations:hover .subDetailistInformations {
+.detailistInformations:is(:hover, :focus) .subDetailistInformations {
     display: flex;
 }
-
 .hoverToggle {
-    position: absolute;
     border-radius: 100%;
-    width: 2.5rem;
     height: 2.5rem;
-    top: -1.1875rem;
     left: -0.4375rem;
+    position: absolute;
+    top: -1.1875rem;
+    width: 2.5rem;
 }
-
-.menuBtn:hover .hoverToggle {
+.menuBtn:hover .hoverToggle,
+#menuToggle:focus + .menuBtn > div {
     background-color: rgba(128, 128, 128, 0.1);
 }
-
 .informationDesktop {
+    align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     margin-top: 1.25rem;
 }
-
 .informationMobile {
     display: none;
 }
-
 .flex div {
     text-align: center;
 }
-
 .additionalOptions {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
 }
-
 .warningBox {
-    font-family: "Poppins", sans-serif;
-    z-index: 2;
-    position: fixed;
-    top: -100%;
-    left: 10%;
-    width: 80%;
-    text-align: center;
     background-color: #fdf7df;
-    color: #c9971c;
     box-shadow: 0.125rem 0.125rem 0.375rem rgba(201, 151, 28, 0.4);
+    color: #c9971c;
+    font-family: "Poppins", sans-serif;
+    left: 10%;
     padding: 0.5rem;
+    position: fixed;
+    text-align: center;
+    top: -100%;
+    width: 80%;
+    z-index: 2;
 }
-
 .removeWarningBox {
     cursor: pointer;
     float: right;
 }
-
 .warningBoxRemoveAnimation {
     animation: removeError 0.3s ease forwards;
 }
-
 .warningBoxAddAnimation {
     animation: showError 0.3s ease forwards;
 }
-
 .hoverableElements div div:hover {
     background-color: rgba(128, 128, 128, 0.075);
     border-radius: 1.5625rem;
 }
-
 .headerLike {
     font-size: 4rem;
     font-weight: bold;
 }
-
 .gallery {
     display: flex;
     flex-wrap: wrap;
     width: 99vw;
 }
-
 .imageContainer {
+    height: 25%;
     position: relative;
     width: 25%;
-    height: 25%;
 }
-
 .gallery img {
     width: 100%;
 }
-
 .overlay {
-    width: 100%;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
     height: 100%;
+    justify-content: center;
+    left: 0;
+    opacity: 0;
     position: absolute;
     top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    opacity: 0;
     transition: 0.6s;
-    color: #fff;
-    font-size: 2rem;
-    cursor: pointer;
+    width: 100%;
 }
-
-.overlay:hover {
+.overlay:is(:hover, :focus) {
     opacity: 1;
 }
-
-.removeImg {
-    position: absolute;
-    right: 5%;
-    bottom: 5%;
-}
-
+.removeImg,
 .mazeFromImg {
-    position: absolute;
-    left: 5%;
     bottom: 5%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    position: absolute;
 }
-
-.popupImages {
+.removeImg {
+    right: 5%;
+}
+.mazeFromImg {
+    left: 5%;
+}
+dialog {
     background-color: rgba(0, 0, 0, 0.85);
     height: 100%;
     width: 100%;
     z-index: 5;
+    overflow-x: hidden;
 }
-
 .popupImages button {
-    background-color: transparent;
+    cursor: pointer;
     font-size: 2.5rem;
     font-weight: bolder;
-    border-width: 0;
     position: absolute;
-    cursor: pointer;
     z-index: 5;
 }
-
+.imgWrapper {
+    margin: auto;
+    height: 100vh;
+    width: 51%;
+}
 .offButton {
     color: #fff;
-    top: 0;
     right: 0.625rem;
+    top: 0;
 }
-
 .leftButton,
 .rightButton {
-    top: 50%;
     color: #808080;
+    height: 100%;
+    width: 40%;
+    opacity: 0;
 }
-
 .leftButton {
-    left: 20%;
     display: none;
+    left: 7.5%;
 }
-
 .rightButton {
-    right: 20%;
     display: none;
+    right: 7.5%;
+}
+:where(.leftButton, .rightButton):is(:focus, :hover) {
+    outline-width: 0;
+    opacity: 1;
 }
 
 .popupImages img {
     background-color: #fff;
+    border-radius: 0.3125rem;
+    left: 50%;
+    object-fit: cover;
     position: absolute;
     top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 0.3125rem;
-    width: 46.875rem;
-    object-fit: cover;
+    width: 50%;
 }
-
+.localStorage {
+    bottom: 5%;
+    position: fixed;
+    right: 5%;
+    text-align: center;
+    z-index: 5;
+}
+.localStorageAnimationStart {
+    animation: fromBottomToUp 1s ease forwards;
+}
+.localStorageAnimationEnd {
+    animation: fromTopToBottom 1s ease forwards;
+}
+.localStorageContainer {
+    background-color: #fff;
+    border-radius: 1.5625rem;
+    border: 0.3125rem var(--small-shadow) solid;
+    box-shadow: 0.25rem 0.25rem 0.25rem 0.25rem var(--big-shadow);
+    padding: 1rem;
+}
+.localStorageContainer i {
+    top: 0.1563rem;
+}
 @media only screen and (max-width: 1500px) {
     .part {
-        flex-direction: column;
         align-items: center;
+        flex-direction: column;
         justify-content: center;
     }
-
     .deleteBtn {
         margin-left: 0;
     }
 }
-
 @media only screen and (max-width: 900px) {
     #modes2 label {
         font-size: 0.9rem;
     }
-
     .overlay {
         font-size: 1.25rem;
     }
 }
-
 @media only screen and (max-width: 800px) {
+    div:first-child,
     .control {
         display: flex;
     }
-
     #modes1,
     #customModes1z h2,
     .infoPC,
     .container-info,
     .informationDesktop,
-    .additionalOptions div:first-child,
-    .levelHeader {
+    .additionalOptions .levelHeader {
         display: none;
     }
-
     h1 {
         font-size: 2rem;
     }
-
     .informationMobile {
         display: block;
     }
-
     #modes2,
     .level {
         flex-direction: column;
     }
-
     #modes2 div {
         margin-bottom: 1.25rem;
     }
-
     #modes2 label {
         font-size: 1.5rem;
     }
-
     .popupImages img {
         width: 95%;
     }
+    .rightButton {
+        right: -12.5%;
+    }
+    .leftButton {
+        left: -12.5%;
+    }
 }
-
 @media only screen and (max-width: 500px) {
     h1,
     .headerLike,
     .removeImg {
         font-size: 1.5rem;
     }
-
     #utrudnienia label,
     #utrudnienia span,
     .informationMobile label {
         font-size: 1rem;
     }
-
     #utrudnienia i {
         font-size: 0.9rem;
     }
-
     .btn1,
     .control button {
         font-size: 0.9375rem;
     }
-
     input[type="number"] {
         width: 25%;
     }
-
     #rotate,
     #rotate option {
-        width: 50%;
         font-size: 0.75rem;
+        width: 50%;
     }
-
     .menuBox {
         width: 18.75rem;
     }
-
     .content {
         scroll-snap-type: y mandatory;
     }
-
     .part {
         font-size: 1.1rem;
         scroll-snap-align: start;
     }
-
     .gallery {
-        overflow: auto;
         height: 100vw;
-        width: 100vw;
+        overflow: auto;
         scroll-snap-type: y mandatory;
+        width: 100vw;
     }
-
     .imageContainer {
-        width: 100%;
         height: 100%;
         scroll-snap-align: start;
+        width: 100%;
     }
-
     .control button {
         padding: 0;
     }
-
     .overlay {
         font-size: 2rem;
     }
