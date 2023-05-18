@@ -6,48 +6,43 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>PROJEKT GENERATOR LABIRYNTÓW</title>
         <link rel="stylesheet" href="projekt.css" type="text/css" />
-        <script src="projekt.js" defer></script>
+        <script src="projekt.js" type="text/javascript" defer></script>
     </head>
 
     <body>
-        <div class="warningBox" aria-hidden="true">
+        <div class="warningBox">
             <span>Uwaga: Generowanie może potrwać więcej czasu i spowoduje dużo większe obciążenie procesora</span>
             <i class="removeWarningBox">&times;</i>
         </div>
         <ul class="notifications"></ul>
-        <div class="localStorage">
-            <div class="localStorageContainer" tabindex="1">
-                <span>Czy chcesz czy by informacje byłe zapisywane w Local Storage?</span>
-                <div class="flex">
-                    <button class="btn1" id="declineLocalStorage">Nie</button>
-                    <button class="btn1" id="acceptLocalStorage">Tak</button>
-                </div>
-                <span>Local Storage zawsze można wyczyścić w menu</span>
-            </div>
-        </div>
         <nav class="menu">
-            <input id="menuToggle" type="checkbox" tabindex="0" aria-label="menu" aria-expanded="false" />
+            <input id="menuToggle" type="checkbox" />
             <label class="menuBtn" for="menuToggle">
-                <span aria-hidden="true"></span>
+                <span></span>
                 <div class="hoverToggle"></div>
             </label>
             <ul class="menuBox">
-                <li class="menuItem"><button id="deleteLocalStorage">Wyczyść Local Storage</button></li>
                 <li class="menuItem"><a class="menuA" href="#game">Gra</a></li>
                 <li class="menuItem"><a class="menuA" href="#game2">Kreator labiryntów</a></li>
                 <li class="menuItem"><a class="menuA" href="#gallerySection">Galeria</a></li>
-                <li class="menuItem">
-                    <div class="detailistInformations" tabindex="0">
-                        <span class="menuInnerBtn2">Informacje szczegółowe</span>
-                        <div class="subDetailistInformations" id="ok">
-                            <span></span>
+                <div class="info">
+                    <li class="menuItem"><span class="menuInnerBtn2">Informacje</span></li>
+                    <div class="subInfo">
+                        <li class="menuItem"><span class="menuInnerBtn2">O strone</span></li>
+                        <li class="menuItem"><span class="menuInnerBtn2">O algorytmach</span></li>
+                        <li class="menuItem"><span class="menuInnerBtn2">O utrudnieniach</span></li>
+                        <div class="detailistInformations">
+                            <li class="menuItem"><span class="menuInnerBtn2">Sczegółowe</span></li>
+                            <div class="subDetailistInformations" id="ok">
+                                <span></span>
+                            </div>
                         </div>
                     </div>
-                </li>
+                </div>
             </ul>
         </nav>
         <header>
-            <img src="img/Logo.png" alt="Logo Pojda" />
+            <img src="img/Logo.png" aria-hidden="true" />
             <h1>PROJEKT GENERATOR LABIRYNTÓW</h1>
         </header>
         <main>
@@ -57,20 +52,16 @@
             <div class="site">
                 <div>
                     <div class="canvas" id="gameContainer">
-                        <canvas class="game" width="1000" height="1000" id="game"></canvas>
+                        <canvas class="game" width="1000px" height="1000px" id="game"></canvas>
                     </div>
-                    <div>
-                        <button class="refreshButton" title="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności" aria-label="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności">&#8634;</button>
-                        <div class="hoverToggle"></div>
-                    </div>
+                    <span class="refreshButton" title="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności">&#8634;</span>
                 </div>
                 <div class="control">
-                    <button aria-label="Ruch w górę">&uarr;</button>
-                    <button aria-label="Ruch w lewo">&larr;</button>
-                    <button aria-label="Ruch w prawo">&darr;</button>
-                    <button aria-label="Ruch w dół">&rarr;</button>
+                    <button>&uarr;</button>
+                    <button>&larr;</button>
+                    <button>&darr;</button>
+                    <button>&rarr;</button>
                 </div>
-                <p class="infoPC">Do kontrolowania kulki używaj STRZAŁEK lub klawiszy W, S, A, D</p>
                 <button class="btn1" id="modifyMaze">Modyfikuj</button>
                 <button class="btn1" id="giveUp">Poddajesz się?</button>
                 <div class="hoverableElements">
@@ -97,7 +88,7 @@
                             <label for="disableGallery">
                                 <span>Wyłącz aktualizowanie galerii</span>
                                 <span class="checkboxContainer">
-                                    <input type="checkbox" name="disableGallery" id="disableGallery" />
+                                    <input type="checkbox" name="disableGallery" id="disableGallery">
                                     <i></i>
                                 </span>
                             </label>
@@ -133,18 +124,10 @@
                                 </span>
                             </label>
                         </div>
-                        <div>
-                            <label for="speakingMode">
-                                <span>Informacje mówione</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="speakingMode" id="speakingMode" />
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
                     </div>
                 </div>
-                <span class="level">Obecny poziom:</span>
+                <h3 class="level">Obecny poziom:</h3>
+                <p class="infoPC">Do kontrolowania kulki używaj STRZAŁEK lub klawiszy W, S, A, D</p>
                 <h2 class="levelHeader">Wybierz poziom</h2>
                 <div class="hoverableElements">
                     <div class="flex" id="modes1">
@@ -171,7 +154,7 @@
                                 <input type="radio" name="tryb" id="tryb1" />
                             </div>
                             <div>
-                                <img src="img/DepthFirstSearchExample.png" alt="Przykładowy labirynt DepthFirstSearch" />
+                                <img src="img/DepthFirstSearchExample.png" aria-hidden="true" />
                             </div>
                         </div>
                         <div class="flex-column">
@@ -180,7 +163,7 @@
                                 <input type="radio" name="tryb" id="tryb2" />
                             </div>
                             <div>
-                                <img src="img/SidewinderExample.png" alt="Przykładowy labirynt Sidewinder" />
+                                <img src="img/SidewinderExample.png" aria-hidden="true" />
                             </div>
                         </div>
                         <div class="flex-column">
@@ -189,7 +172,7 @@
                                 <input type="radio" name="tryb" id="tryb3" />
                             </div>
                             <div>
-                                <img src="img/HuntAndKillExample.png" alt="Przykładowy labirynt Hunt-and-Kill" />
+                                <img src="img/HuntAndKillExample.png" aria-hidden="true" />
                             </div>
                         </div>
                         <div class="flex-column">
@@ -198,7 +181,7 @@
                                 <input type="radio" name="tryb" id="tryb4" />
                             </div>
                             <div>
-                                <img src="img/AldousBroderExample.png" alt="Przykładowy labirynt Aldous-Broder" />
+                                <img src="img/AldousBroderExample.png" aria-hidden="true" />
                             </div>
                         </div>
                         <div>
@@ -207,7 +190,7 @@
                         </div>
                     </div>
                 </div>
-                <h2>Utrudnienia</h2>
+                <h3>Utrudnienia</h3>
                 <div id="utrudnienia">
                     <div class="hoverableElements">
                         <div class="ok">
@@ -268,7 +251,7 @@
                                 <span>Mnożnik: x2</span>
                             </div>
                             <div>
-                                <label for="rotate">Obrót canvasa</label>
+                                <label for="utrudnienia7">Obrót canvasa</label>
                                 <select name="utrudnienia7" id="rotate">
                                     <option value="0" data-pkt="1">0° - 1x</option>
                                     <option value="45" data-pkt="1.2">45° - 1.2x</option>
@@ -317,14 +300,14 @@
                         <div class="flex-column">
                             <span class="headerLike">Kreator labiryntów</span>
                             <div class="canvas">
-                                <canvas class="game" id="game2" width="1000" height="1000"></canvas>
+                                <canvas class="game" id="game2" width="1000px" height="1000px"></canvas>
                             </div>
                             <div class="informationDesktop">
                                 <div class="flex-column">
-                                    <span>(Lewy Przycisk Myszy) by usunąć ściane</span>
-                                    <span>(Ctrl + Lewy Przycisk Myszy) by postawić ściane</span>
                                     <span>(Ctrl + Z) by cofnąć</span>
                                     <span>(Ctrl + Y) by przywrócić</span>
+                                    <span>(Lewy Przycisk Myszy) by usunąć ściane</span>
+                                    <span>(Ctrl + Lewy Przycisk Myszy) by postawić ściane</span>
                                 </div>
                                 <br />
                                 <div class="hoverableElements">
@@ -376,7 +359,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h2>Pozycja Gracz</h2>
+                            <h3>Pozycja Gracz</h3>
                             <div class="hoverableElements">
                                 <div class="flex">
                                     <div class="flex-column">
@@ -391,7 +374,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h2>Pozycja Końca</h2>
+                            <h3>Pozycja Końca</h3>
                             <div class="hoverableElements">
                                 <div class="flex">
                                     <div class="flex-column">
@@ -416,7 +399,7 @@
                 <section id="gallerySection">
                     <div class="flex-column">
                         <span class="headerLike">Galeria</span>
-                        <div>
+                        <div class="utrudnienia5-content">
                             <label for="transparentBackground">
                                 <span>Transparentne tło</span>
                                 <span class="checkboxContainer">
@@ -428,10 +411,10 @@
                     </div>
                     <div class="gallery"></div>
                     <dialog class="popupImages">
-                        <button class="offButton" aria-label="Zamknij galerie">&times;</button>
-                        <button class="leftButton" aria-label="Poprzednie zdjęcie">&#8592;</button>
-                        <button class="rightButton" aria-label="Następne zdjęcie">&#8594;</button>
-                        <img src="//:0" alt="Obecne zdjęcie" />
+                        <button class="offButton">&times;</button>
+                        <button class="leftButton">&#8592;</button>
+                        <button class="rightButton">&#8594;</button>
+                        <img src="" aria-hidden="true" />
                     </dialog>
                 </section>
             </div>
