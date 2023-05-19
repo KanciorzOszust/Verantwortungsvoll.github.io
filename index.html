@@ -26,18 +26,17 @@
             </div>
         </div>
         <nav class="menu">
-            <input id="menuToggle" type="checkbox" aria-label="Menu" aria-expanded="false" />
-            <label class="menuBtn" for="menuToggle">
+            <button class="menuBtn" aria-label="Menu" aria-expanded="false">
                 <span aria-hidden="true"></span>
                 <div class="hoverToggle"></div>
-            </label>
+            </button>
             <ul class="menuBox">
-                <li class="menuItem"><button id="deleteLocalStorage" tabindex="-1">Wyczyść Local Storage</button></li>
-                <li class="menuItem"><a class="menuA" href="#game" tabindex="-1">Gra</a></li>
-                <li class="menuItem"><a class="menuA" href="#game2" tabindex="-1">Kreator labiryntów</a></li>
-                <li class="menuItem"><a class="menuA" href="#gallerySection" tabindex="-1">Galeria</a></li>
+                <li class="menuItem"><button id="deleteLocalStorage">Wyczyść Local Storage</button></li>
+                <li class="menuItem"><a class="menuA" href="#game">Gra</a></li>
+                <li class="menuItem"><a class="menuA" href="#game2">Kreator labiryntów</a></li>
+                <li class="menuItem"><a class="menuA" href="#gallerySection">Galeria</a></li>
                 <li class="menuItem">
-                    <div class="detailistInformations" tabindex="-1">
+                    <div class="detailistInformations">
                         <span class="menuInnerBtn2">Informacje szczegółowe</span>
                         <div class="subDetailistInformations" id="ok">
                             <span></span>
@@ -65,10 +64,10 @@
                     </div>
                 </div>
                 <div class="control">
-                    <button aria-label="Ruch w górę">&uarr;</button>
-                    <button aria-label="Ruch w lewo">&larr;</button>
-                    <button aria-label="Ruch w prawo">&darr;</button>
-                    <button aria-label="Ruch w dół">&rarr;</button>
+                    <button class="btn1" aria-label="Ruch w górę">&uarr;</button>
+                    <button class="btn1" aria-label="Ruch w lewo">&larr;</button>
+                    <button class="btn1" aria-label="Ruch w prawo">&darr;</button>
+                    <button class="btn1" aria-label="Ruch w dół">&rarr;</button>
                 </div>
                 <p class="infoPC">Do kontrolowania kulki używaj STRZAŁEK lub klawiszy W, S, A, D</p>
                 <button class="btn1" id="modifyMaze">Modyfikuj</button>
@@ -200,10 +199,6 @@
                             <div>
                                 <img src="img/AldousBroderExample.png" alt="Przykładowy labirynt Aldous-Broder" />
                             </div>
-                        </div>
-                        <div>
-                            <label for="tryb5">Eller's Algorithm</label>
-                            <input type="radio" name="tryb" id="tryb5" disabled />
                         </div>
                     </div>
                 </div>

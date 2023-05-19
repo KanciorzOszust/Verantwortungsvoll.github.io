@@ -17,7 +17,6 @@ class Canvas {
     static aldousBroderCount = 0;
     static depthFirstSearchCount = 0;
     static huntAndKillCount = 0;
-    static ellerCount = 0;
     static exportedGames = 0;
     static exportedGamesAsFile = 0;
     static importedGames = 0;
@@ -244,10 +243,6 @@ class Canvas {
         await animatedGeneration();
         enableInputs();
         createToast("toastInfo", "Labirynt został pomyślnie utworzony");
-    }
-
-    async eller() {
-        Canvas.ellerCount++;
     }
 
     async solve(testing, time) {
@@ -593,11 +588,6 @@ async function generateMaze() {
             trybyMode = "Aldous-Broder";
             levelHTML.innerHTML += "<span>Tryb generowania: Aldous-Broder</span>";
             break;
-        case tryby[4].checked:
-            await gra.eller();
-            tryby = "Ellers Algorithm";
-            levelHTML.innerHTML += "<span>Tryb generowania: Ellers Algorithm</span>";
-            break;
     }
 }
 
@@ -608,8 +598,7 @@ async function mainFunction() {
             cvs.scrollIntoView();
             cvs.scrollIntoView();
             if (!disableNotification.checked) {
-                if (warningBox.classList.length > 15) warningBox.classList.add("warningBoxRemoveAnimation");
-                warningBox.classList.remove("warningBoxAddAnimation");
+                if (getComputedStyle(styles).getPropertyValue("--warningBoxAnimation") == "showError 0.3s ease forwards") styles.style.setProperty("--warningBoxAnimation", "removeError 0.3s ease forwards");
             }
             gameIndex++;
             disableInputs();
@@ -912,7 +901,6 @@ function renderDetailistInformations() {
                                        Aldous-Broder ${Canvas.aldousBroderCount}
                                        Depth-First-Search: ${Canvas.depthFirstSearchCount}
                                        Hunt-and-Kill: ${Canvas.huntAndKillCount}
-                                       Eller: ${Canvas.ellerCount}
                                        Wyrenderowany gracz: ${Player.renderCount}
                                        Wyrenderowany koniec: ${Player.renderEndCount}
                                        Ruch w góre: ${Player.moveUpCount}
@@ -1203,8 +1191,7 @@ function stringifyObject(object) {
 }
 
 function localStorageCSSManipulation() {
-    localStoragePopup.classList.remove("localStorageAnimationStart");
-    localStoragePopup.classList.add("localStorageAnimationEnd");
+    styles.style.setProperty("--localStorageAnimation", "fromTopToBottom 1s ease forwards");
     setTimeout(function () {
         localStoragePopup.classList.add("displayNone");
     }, 1000);
@@ -1366,8 +1353,7 @@ function getLocalStorage() {
 
 function localStorageMainFunction() {
     if (localStorage.getItem("accept") == null) {
-        localStoragePopup.classList.remove("localStorageAnimationEnd");
-        localStoragePopup.classList.add("localStorageAnimationStart");
+        styles.style.setProperty("--localStorageAnimation", "fromBottomToUp 1s ease forwards");
         localStoragePopup.classList.remove("displayNone");
         declineLocalStorage.addEventListener("click", function () {
             localStorageCSSManipulation();
@@ -1384,12 +1370,6 @@ function localStorageMainFunction() {
     }
 }
 
-function setTabindex(value) {
-    menuItems.forEach(function (e) {
-        e.setAttribute("tabindex", value);
-    });
-}
-
 function speakText(text) {
     if (speakingMode.checked) {
         synth.cancel();
@@ -1403,8 +1383,9 @@ let ctx = cvs.getContext("2d");
 let cvs2 = document.querySelector("#game2"); //2 canvas
 let ctx2 = cvs2.getContext("2d");
 
-let menuToggle = document.querySelector("#menuToggle"); //przełącznik menu
-let menuItems = document.querySelectorAll(".menubox, button, .menubox a, .menubox .detailistInformations");
+let styles = document.querySelector(":root");
+let menuToggle = document.querySelector(".menuBtn"); //przełącznik menu
+let menuBox = document.querySelector(".menuBox");
 let detailistInformations = document.querySelector(".subDetailistInformations span"); //Menu => informacje szczegółowe
 
 let time = document.querySelector(".time"); //Czas spędzony na poziomie:
@@ -1562,7 +1543,6 @@ let synth = window.speechSynthesis;
 document.addEventListener("DOMContentLoaded", function () {
     localStorageMainFunction();
     renderDetailistInformations();
-    if (menuToggle.checked) setTabindex(0);
 
     deleteLocalStorage.addEventListener("click", function () {
         localStorageContainer.focus();
@@ -1580,13 +1560,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    menuToggle.addEventListener("change", function () {
-        if (menuToggle.checked) {
+    menuToggle.addEventListener("click", function () {
+        if (getComputedStyle(styles).getPropertyValue("--menuBoxLeft") == "-100%") {
+            styles.style.setProperty("--menuBoxLeft", "0");
+            styles.style.setProperty("--menuBoxVisibility", "visible");
+            styles.style.setProperty("--spanRotate", "rotate(45deg)");
+            styles.style.setProperty("--spanAfterRotate", "rotate(90deg)");
+            styles.style.setProperty("--spanBeforeTop", "0");
+            styles.style.setProperty("--spanAfterTop", "0");
             menuToggle.setAttribute("aria-expanded", true);
-            setTabindex(0);
         } else {
+            styles.style.setProperty("--menuBoxLeft", "-100%");
+            styles.style.setProperty("--menuBoxVisibility", "hidden");
+            styles.style.setProperty("--spanRotate", "rotate(0deg)");
+            styles.style.setProperty("--spanAfterRotate", "rotate(0deg)");
+            styles.style.setProperty("--spanBeforeTop", "-0.5rem");
+            styles.style.setProperty("--spanAfterTop", "0.5rem");
             menuToggle.setAttribute("aria-expanded", false);
-            setTabindex(-1);
         }
     });
 
@@ -1656,20 +1646,17 @@ document.addEventListener("DOMContentLoaded", function () {
     inputs.forEach(function (e) {
         e.addEventListener("change", function () {
             if (modes[2].checked && (tryby[0].checked || tryby[2].checked || tryby[3].checked) && !animatedGenerationInput.checked && !disableNotification.checked) {
-                warningBox.classList.remove("warningBoxRemoveAnimation");
-                warningBox.classList.add("warningBoxAddAnimation");
+                styles.style.setProperty("--warningBoxAnimation", "showError 0.3s ease forwards");
                 warningBox.setAttribute("aria-hidden", false);
-            } else if (warningBox.classList.value.length > 15) {
-                warningBox.classList.remove("warningBoxAddAnimation");
-                warningBox.classList.add("warningBoxRemoveAnimation");
+            } else if (getComputedStyle(styles).getPropertyValue("--warningBoxAnimation") == "showError 0.3s ease forwards") {
+                styles.style.setProperty("--warningBoxAnimation", "removeError 0.3s ease forwards");
                 warningBox.setAttribute("aria-hidden", true);
             }
         });
     });
 
     warningBox.addEventListener("click", function () {
-        warningBox.classList.remove("warningBoxAddAnimation");
-        warningBox.classList.add("warningBoxRemoveAnimation");
+        styles.style.setProperty("--warningBoxAnimation", "removeError 0.3s ease forwards");
         warningBox.setAttribute("aria-hidden", true);
     });
 
@@ -1810,17 +1797,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     transparentBackground.addEventListener("click", function () {
-        if (transparentBackground.checked) popupImages.classList.add("backgroundTransparent");
-        else popupImages.classList.remove("backgroundTransparent");
+        if (transparentBackground.checked) styles.style.setProperty("--popupImageBackground", "transparent");
+        else styles.style.setProperty("--popupImageBackground", "#fff");
     });
 
     //CUSTOM GAMES
 
     scrollToGame.forEach(function (el) {
         el.addEventListener("click", function () {
-            menuToggle.checked = false;
+            styles.style.setProperty("--menuBoxLeft", "-100%");
+            styles.style.setProperty("--menuBoxVisibility", "hidden");
+            styles.style.setProperty("--spanRotate", "rotate(0deg)");
+            styles.style.setProperty("--spanAfterRotate", "rotate(0deg)");
+            styles.style.setProperty("--spanBeforeTop", "-0.5rem");
+            styles.style.setProperty("--spanAfterTop", "0.5rem");
             menuToggle.setAttribute("aria-expanded", false);
-            setTabindex(-1);
         });
     });
 
@@ -1922,4 +1913,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-//wersja (korkociąg 10)
+//wersja (korkociąg 11)
