@@ -330,7 +330,7 @@ class Canvas {
                     Canvas.lostGames++;
                     finalMultiplier = 0;
                     this.drawWalls(ctx);
-                    gracz.renderEnd();
+                    gracz.renderEnd("generator", ctx);
                     ctx.beginPath();
                     ctx.arc(gracz.x, gracz.y, gracz.size, 0, Math.PI * 2);
                     ctx.lineWidth = 3.5;
@@ -414,7 +414,7 @@ class Player {
             Player.renderEndCount++;
             renderDetailistInformations();
         }
-        if (!niewidocznyKoniecValue || mode == "generator") {
+        if (!niewidocznyKoniecValue || mode == "creator") {
             ctx.beginPath();
             ctx.arc(this.endPositionX, this.endPositionY, this.size, 0, 2 * Math.PI);
             ctx.fillStyle = "yellow";
@@ -551,7 +551,7 @@ const sleep = async function (milliseconds) {
 
 async function animatedGeneration() {
     //Animowanie generowaia
-    await sleep(1);
+    await sleep(gra.col / 2.5);
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     gracz.render();
     gra.drawWalls(ctx);
@@ -593,11 +593,12 @@ async function generateMaze() {
 
 async function mainFunction() {
     //Tworzenie gry
-    if (window.innerWidth < 800 || modes[0].checked || modes[1].checked || modes[2].checked || importedCustomGame != undefined) {
-        if (tryby[0].checked || tryby[1].checked || tryby[2].checked || tryby[3].checked || tryby[4].checked || importedCustomGame != undefined) {
+    if (importedCustomGame != undefined || window.innerWidth < 800 || modes[0].checked || modes[1].checked || modes[2].checked) {
+        if (importedCustomGame != undefined || tryby[0].checked || tryby[1].checked || tryby[2].checked || tryby[3].checked) {
             cvs.scrollIntoView();
             cvs.scrollIntoView();
             if (!disableNotification.checked) {
+                if (window.getComputedStyle(performanceBox, null).top == "0px") styles.style.setProperty("--warningBoxAnimationTop", "4%");
                 if (getComputedStyle(styles).getPropertyValue("--warningBoxAnimation") == "showError 0.3s ease forwards") styles.style.setProperty("--warningBoxAnimation", "removeError 0.3s ease forwards");
             }
             gameIndex++;
@@ -611,7 +612,6 @@ async function mainFunction() {
             ctx.clearRect(0, 0, cvs.width, cvs.height);
 
             levelHTML.innerText = "OBECNY POZIOM: ";
-
             importedCustomGameWin = false;
             allowOperations = false;
             if (importedCustomGame == undefined) {
@@ -664,10 +664,9 @@ async function mainFunction() {
             allowOperations = true;
             constGame = [gra];
             constPlayer = [gracz];
-            if (!disableGallery.checked) addToGallery();
             gracz.render();
             gra.drawWalls(ctx);
-            losowyKoniec.removeAttribute("disabled");
+            if (!disableGallery.checked) addToGallery();
             pseudoMultipliers = [];
             multipliers = [];
             finalMultiplier = 1;
@@ -688,8 +687,8 @@ async function mainFunction() {
                 if (obrotCanvasa.value == 180 && odwroconeSterowanieValue) multipliers.pop();
             }
             canvasMain.style.transform = "rotate(" + obrotCanvasa.value + "deg)";
-
-            if (widocznoscValue != 0) multipliers.push((1 / widocznoscValue) * 10);
+            if (widocznoscValue != 0 && (1 / widocznoscValue) * 10 >= 1) multipliers.push((1 / widocznoscValue) * 10);
+            else multipliers.push(1);
             for (let i = 0; i < multipliers.length; i++) {
                 finalMultiplier *= multipliers[i];
             }
@@ -732,8 +731,10 @@ function addToGallery() {
         imageSrc: image,
         gameDifficulty: modesMode,
         imageGeneration: trybyMode,
-        gra: [...constGame],
-        gracz: [...constPlayer],
+        gra: gra,
+        gracz: gracz,
+        playerX: gracz.size,
+        playerY: gracz.size,
         endPositionX: koniecX,
         endPositionY: koniecY,
         currentCellX: 0,
@@ -792,8 +793,10 @@ function gameEnd(win) {
     clearInterval(timer);
 
     saves.push({
-        gra: [...constGame],
-        gracz: [...constPlayer],
+        gra: gra,
+        gracz: gracz,
+        playerX: gracz.size,
+        playerY: gracz.size,
         endPositionX: koniecX,
         endPositionY: koniecY,
         currentCellX: 0,
@@ -854,6 +857,7 @@ function updateSaves() {
 
 async function endingFunction() {
     //Zakończenie gry
+    blockMovement = true;
     await sleep(100);
     gameEnd(true);
 }
@@ -879,12 +883,6 @@ function createToast(id, text) {
                          <span>${text}</span>
                       </div>
                       <i id='deleteToast'>&times;</i>`;
-
-    let deleteToast = document.querySelector("#deleteToast");
-
-    deleteToast.addEventListener("click", function () {
-        removeToast(toast);
-    });
 
     toast.timeoutId = setTimeout(function () {
         removeToast(toast);
@@ -1059,16 +1057,14 @@ function exportMaze(asFile) {
     koniecY = customEndPositionY.value;
     customGame.solve(true, 0).then(function (result) {
         if (result == true) {
+            customPlayer.x = customPlayerX;
+            customPlayer.y = customPlayerY;
+            customPlayer.x += customPlayerX * customPlayerPositionX.value - customPlayerX / 2;
+            customPlayer.y += customPlayerY * customPlayerPositionY.value - customPlayerY / 2;
             if (!asFile) {
-                customPlayer.x = customPlayerX;
-                customPlayer.y = customPlayerY;
-
                 importedCustomGame = customGame;
                 importedCustomPlayer = customPlayer;
                 importedCustomGameWin = true;
-
-                customPlayer.x += customPlayerX * customPlayerPositionX.value - customPlayerX / 2;
-                customPlayer.y += customPlayerY * customPlayerPositionY.value - customPlayerY / 2;
 
                 Canvas.exportedGames++;
                 mainFunction();
@@ -1076,8 +1072,10 @@ function exportMaze(asFile) {
                 cvs.scrollIntoView();
             } else {
                 let objectToDownload = {
-                    gra: [customGame],
-                    gracz: [customPlayer],
+                    gra: customGame,
+                    gracz: customPlayer,
+                    playerX: customPlayer.x,
+                    playerY: customPlayer.y,
                     gameDifficulty: customMode,
                     currentCellX: currentCell[0],
                     currentCellY: currentCell[1],
@@ -1168,12 +1166,24 @@ function rewindMakingHistoryFunction() {
     }
 }
 
+function warningBoxCss(animation, aria) {
+    if (window.getComputedStyle(performanceBox, null).top == "9.6875px") styles.style.setProperty("--warningBoxAnimationTop", "5%");
+    else styles.style.setProperty("--warningBoxAnimationTop", "1%");
+    styles.style.setProperty("--warningBoxAnimation", animation);
+    warningBox.setAttribute("aria-hidden", aria);
+}
+
+function performaceBoxCss(animation, aria) {
+    styles.style.setProperty("--performaceBoxAnimation", animation);
+    performanceBox.setAttribute("aria-hidden", aria);
+}
+
 function importFromObject(object, objectIndex, addNeighbors) {
     currentCell = [object[objectIndex].currentCellX, object[objectIndex].currentCellY];
-    importedCustomGame = new Canvas(object[objectIndex].gra[0].row, object[objectIndex].gra[0].col);
-    importedCustomGame.maze = object[objectIndex].gra[0].maze;
+    importedCustomGame = new Canvas(object[objectIndex].gra.row, object[objectIndex].gra.col);
+    importedCustomGame.maze = object[objectIndex].gra.maze;
     if (addNeighbors) importedCustomGame.addNeighbors();
-    importedCustomPlayer = new Player(500 / importedCustomGame.row, 500 / importedCustomGame.col, object[objectIndex].gracz[0].size);
+    importedCustomPlayer = new Player(object[objectIndex].playerX, object[objectIndex].playerY, object[objectIndex].gracz.size);
     customMode = object[objectIndex].gameDifficulty;
     koniecX = object[objectIndex].endPositionX;
     koniecY = object[objectIndex].endPositionY;
@@ -1295,7 +1305,6 @@ function getLocalStorageMainInformations() {
     m = gameInformations.m;
     sec = gameInformations.sec;
     timer = setInterval(timerFunction, 1000);
-    addToGallery();
 }
 
 function getLocalStorageSavesInformations() {
@@ -1377,6 +1386,8 @@ function speakText(text) {
         synth.speak(speaker);
     }
 }
+
+let performancesIndex = 0;
 
 let cvs = document.querySelector("#game"); //1 canvas
 let ctx = cvs.getContext("2d");
@@ -1460,6 +1471,7 @@ let numberOfMoves = 0; //liczba ruchów
 
 let notifications = document.querySelector(".notifications"); //Powiadomienia Toast
 let warningBox = document.querySelector(".warningBox"); //Warning box "Uwaga: Generowanie może potrwać więcej czasu i spowoduje dużo większe obciążenie procesora"
+let performanceBox = document.querySelector(".permormaceBox");
 
 let repeated = 0;
 
@@ -1526,7 +1538,6 @@ let currentParentIndex = 0;
 let hasEventListener = false;
 
 let localStoragePopup = document.querySelector(".localStorage");
-let localStorageContainer = document.querySelector(".localStorageContainer");
 let declineLocalStorage = document.querySelector("#declineLocalStorage");
 let acceptLocalStorage = document.querySelector("#acceptLocalStorage");
 let deleteLocalStorage = document.querySelector("#deleteLocalStorage");
@@ -1545,9 +1556,9 @@ document.addEventListener("DOMContentLoaded", function () {
     renderDetailistInformations();
 
     deleteLocalStorage.addEventListener("click", function () {
-        localStorageContainer.focus();
         localStorage.clear();
         localStorageMainFunction();
+        performaceBoxCss("removePerformance 0.3s ease forwards", true);
     });
 
     inputCheckboxAndRadio.forEach(function (el) {
@@ -1597,7 +1608,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 pseudoMultipliers.push(parseFloat(obrotCanvasa[obrotCanvasa.value / 45].dataset.pkt));
                 if (odwroconeSterowanie.checked && obrotCanvasa.value == 180) pseudoMultipliers.pop();
             }
-            if (widocznosc.value != 0) pseudoMultipliers.push((1 / widocznosc.value) * 10);
+            if (widocznosc.value != 0 && (1 / widocznosc.value) * 10 >= 1) pseudoMultipliers.push((1 / widocznosc.value) * 10);
+            else pseudoMultipliers.push(1);
 
             for (let i = 0; i < pseudoMultipliers.length; i++) {
                 pseudoFinalMultiplier *= pseudoMultipliers[i];
@@ -1646,22 +1658,44 @@ document.addEventListener("DOMContentLoaded", function () {
     inputs.forEach(function (e) {
         e.addEventListener("change", function () {
             if (modes[2].checked && (tryby[0].checked || tryby[2].checked || tryby[3].checked) && !animatedGenerationInput.checked && !disableNotification.checked) {
-                styles.style.setProperty("--warningBoxAnimation", "showError 0.3s ease forwards");
-                warningBox.setAttribute("aria-hidden", false);
+                warningBoxCss("showError 0.3s ease forwards", false);
             } else if (getComputedStyle(styles).getPropertyValue("--warningBoxAnimation") == "showError 0.3s ease forwards") {
-                styles.style.setProperty("--warningBoxAnimation", "removeError 0.3s ease forwards");
-                warningBox.setAttribute("aria-hidden", true);
+                warningBoxCss("removeError 0.3s ease forwards", true);
             }
         });
     });
 
     warningBox.addEventListener("click", function () {
-        styles.style.setProperty("--warningBoxAnimation", "removeError 0.3s ease forwards");
-        warningBox.setAttribute("aria-hidden", true);
+        warningBoxCss("removeError 0.3s ease forwards", true);
     });
 
-    btn1.addEventListener("click", function () {
-        if (allowOperations) mainFunction();
+    performanceBox.addEventListener("click", function () {
+        performaceBoxCss("removePerformance 0.3s ease forwards", true);
+        if (window.getComputedStyle(warningBox, null).top == "48.4375px") {
+            styles.style.setProperty("--warningBoxAnimationTop", "1%");
+        }
+        performancesIndex = 0;
+    });
+
+    btn1.addEventListener("click", async function () {
+        let start = performance.now();
+        if (allowOperations) await mainFunction();
+        if (!disableNotification.checked && performance.now() - start > 150) {
+            performancesIndex++;
+            if (performancesIndex >= 3) {
+                performaceBoxCss("showPerformance 0.3s ease forwards", false);
+            } else if (getComputedStyle(styles).getPropertyValue("--performaceBoxAnimation") == "showPerformance 0.3s ease forwards") {
+                performaceBoxCss("removePerformance 0.3s ease forwards", true);
+            }
+        } else {
+            performancesIndex = 0;
+        }
+    });
+
+    notifications.addEventListener("click", function (event) {
+        if (event.target.id == "deleteToast") {
+            removeToast(event.target.parentNode);
+        }
     });
 
     controlsMobile.forEach((el) => {
