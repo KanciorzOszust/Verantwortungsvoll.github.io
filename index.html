@@ -14,6 +14,10 @@
             <span>Uwaga: Generowanie może potrwać więcej czasu i spowoduje dużo większe obciążenie procesora</span>
             <i class="removeWarningBox">&times;</i>
         </div>
+        <div class="permormaceBox" aria-hidden="true">
+            <span>Problemy z wydajnością? Spróbuj wyczyścić Local Storage lub usunąć zapisy</span>
+            <i class="removePermormaceBox">&times;</i>
+        </div>
         <ul class="notifications"></ul>
         <div class="localStorage">
             <div class="localStorageContainer">
@@ -28,7 +32,7 @@
         <nav class="menu">
             <button class="menuBtn" aria-label="Menu" aria-expanded="false">
                 <span aria-hidden="true"></span>
-                <div class="hoverToggle"></div>
+                <i class="hoverToggle"></i>
             </button>
             <ul class="menuBox">
                 <li class="menuItem"><button id="deleteLocalStorage">Wyczyść Local Storage</button></li>
@@ -264,7 +268,7 @@
                             </div>
                             <div>
                                 <label for="rotate">Obrót canvasa</label>
-                                <select name="utrudnienia7" id="rotate">
+                                <select name="utrudnienia7" id="rotate" class="select">
                                     <option value="0" data-pkt="1">0° - 1x</option>
                                     <option value="45" data-pkt="1.2">45° - 1.2x</option>
                                     <option value="90" data-pkt="2">90° - 2x</option>
@@ -408,7 +412,7 @@
                     </div>
                 </section>
                 <hr />
-                <section id="gallerySection">
+                <div id="gallerySection">
                     <div class="flex-column">
                         <span class="headerLike">Galeria</span>
                         <div>
@@ -421,7 +425,17 @@
                             </label>
                         </div>
                     </div>
-                    <div class="gallery"></div>
+                    <div class="galleryContainer">
+                        <div class="sortContainer">
+                            <span>sortuj według</span>
+                            <select name="sortBy" id="sortBy" class="select">
+                                <option value="byIndex">Numeracji</option>
+                                <option value="byDifficulty">Trudności</option>
+                                <option value="byGeneration">Trybu generowania</option>
+                            </select>
+                        </div>
+                        <div class="gallery"></div>
+                    </div>
                     <dialog class="popupImages">
                         <div class="imgWrapper">
                             <button class="offButton" aria-label="Zamknij galerie">&times;</button>
@@ -430,7 +444,7 @@
                             <img src="//:0" alt="Obecne zdjęcie" />
                         </div>
                     </dialog>
-                </section>
+                </div>
             </div>
         </main>
     </body>
