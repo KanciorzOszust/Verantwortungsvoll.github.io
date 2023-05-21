@@ -305,6 +305,15 @@ input[type="checkbox"] {
     appearance: none;
     border-radius: 100%;
 }
+input[type="checkbox"]:checked ~ i {
+    background-color: #2aa0ff;
+}
+input[type="checkbox"]:checked ~ i::before {
+    left: calc(100% - 0.7813rem);
+}
+input[type="checkbox"]:focus {
+    border: 0.125rem #000 solid;
+}
 .checkboxContainer i {
     background-color: #ddd;
     border-radius: 0.9375rem;
@@ -315,9 +324,6 @@ input[type="checkbox"] {
 }
 :where(.additionalOptions, .disableInputRewindContainer) .checkboxContainer i {
     top: 0.1563rem;
-}
-input[type="checkbox"]:checked ~ i {
-    background-color: #2aa0ff;
 }
 .checkboxContainer i::before {
     background-color: #fff;
@@ -330,12 +336,6 @@ input[type="checkbox"]:checked ~ i {
     top: 0.1563rem;
     transition: 0.5s;
     width: 0.625rem;
-}
-input[type="checkbox"]:checked ~ i::before {
-    left: calc(100% - 0.7813rem);
-}
-input[type="checkbox"]:focus {
-    border: 0.125rem #000 solid;
 }
 .mode2label,
 .mode2,
@@ -369,11 +369,19 @@ input[type="checkbox"]:focus {
 .btn1:focus {
     text-decoration: underline;
 }
-.content {
+.historia,
+.content,
+.part {
     align-items: center;
+    display: flex;
+}
+.historia {
+    flex-direction: column;
+    justify-content: center;
+}
+.content {
     background-color: #fff;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem var(--big-shadow);
-    display: flex;
     flex-direction: column;
     max-height: 14.5rem;
     overflow-x: hidden;
@@ -384,7 +392,6 @@ input[type="checkbox"]:focus {
     background-color: #f3f1f1;
     border: 0.0625rem var(--small-shadow) solid;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem var(--big-shadow);
-    display: flex;
     font-size: 1rem;
     margin: 0.625rem;
     padding: 0.625rem;
@@ -841,7 +848,7 @@ dialog {
     .part {
         align-items: center;
         flex-direction: column;
-        min-height: 13.125rem;
+        min-height: 11.25rem;
     }
     .deleteBtn {
         margin-left: 0;
@@ -935,15 +942,15 @@ dialog {
         width: 80vw;
     }
     .gallery {
-        height: 100vw;
+        max-height: 100vw;
         overflow: auto;
         scroll-snap-type: y mandatory;
         width: 100vw;
     }
     .sortContainer,
     .sortContainer select {
-        font-size: 12px;
-        margin: 4px 1px;
+        font-size: 0.75rem;
+        margin: 0.25rem 0.0625rem;
     }
     .imageContainer {
         height: 100%;
@@ -957,3 +964,4 @@ dialog {
         font-size: 2rem;
     }
 }
+/*wersja (korkociąg 15)*/

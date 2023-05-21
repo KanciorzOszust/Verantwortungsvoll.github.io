@@ -268,8 +268,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (animatedSolve.checked && time > 0) await sleep(time);
 
-                for (let j = 0; j < 4; j++) {
-                    let neighbour = facing[j];
+                for (let i2 = 0; i2 < 4; i2++) {
+                    let neighbour = facing[i2];
                     if (neighbour == undefined) continue;
                     if (currentPos[0] > neighbour.indexY && !this.maze[currentPos[0]][currentPos[1]].walls.wallN) {
                         possibleMoves.push(neighbour);
@@ -285,9 +285,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     } // w
                 }
                 let lowestIndex = 100;
-                for (let j = 0; j < possibleMoves.length; j++) {
-                    if (possibleMoves[j].visitedIndex < lowestIndex) {
-                        lowestIndex = possibleMoves[j].visitedIndex;
+                for (let i2 = 0; i2 < possibleMoves.length; i2++) {
+                    if (possibleMoves[i2].visitedIndex < lowestIndex) {
+                        lowestIndex = possibleMoves[i2].visitedIndex;
                     }
                 }
                 if (history.length > 0) {
@@ -305,10 +305,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 history.push(this.maze[currentPos[0]][currentPos[1]]);
-                for (let j = 0; j < 4; j++) {
-                    let tempj = j + orientation;
-                    if (tempj > 3) tempj -= 4;
-                    neighbour = facing[tempj];
+                for (let i2 = 0; i2 < 4; i2++) {
+                    let tempi2 = i2 + orientation;
+                    if (tempi2 > 3) tempi2 -= 4;
+                    neighbour = facing[tempi2];
                     if (neighbour == undefined) continue;
                     if (neighbour.visitedIndex > lowestIndex) continue;
                     if (possibleMoves.includes(neighbour)) {
@@ -744,8 +744,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateGallery() {
-        if (listOfImages.length != 0) sortContainer[1].classList.remove("displayNone");
-        else sortContainer[1].classList.add("displayNone");
+        containersCSS(listOfImages, 1);
         gallery.innerHTML = "";
         listOfImages.forEach(function (el) {
             gallery.innerHTML += `<div class="imageContainer">
@@ -787,6 +786,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     cards[i].classList.remove("displayNone");
                 }
             }
+        }
+    }
+
+    function containersCSS(arr, i) {
+        if (arr.length != 0) {
+            sortContainer[i].classList.remove("displayNone");
+            searchContainer[i].classList.remove("displayNone");
+            sortContainer[i].setAttribute("aria-hidden", false);
+            searchContainer[i].setAttribute("aria-hidden", false);
+        } else {
+            sortContainer[i].classList.add("displayNone");
+            searchContainer[i].classList.add("displayNone");
+            sortContainer[i].setAttribute("aria-hidden", true);
+            searchContainer[i].setAttribute("aria-hidden", true);
         }
     }
 
@@ -832,7 +845,6 @@ document.addEventListener("DOMContentLoaded", function () {
             currentCellX: 0,
             currentCellY: 0,
             currentRandomEndPos: [gracz.endPositionX, gracz.endPositionY],
-            isCustom: importedCustomGameWin,
             gameNumber: gameHistoryIndex,
             gameDifficulty: modesMode.toLowerCase(),
             gameGenerationMode: trybyMode.toLowerCase(),
@@ -868,8 +880,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateSaves() {
-        if (saves.length != 0) sortContainer[0].classList.remove("displayNone");
-        else sortContainer[0].classList.add("displayNone");
+        containersCSS(saves, 0);
         gameHistory.innerHTML = "";
         saves.forEach(function (el) {
             let part = `<div class="part" style="background-color: ${el.color}">
@@ -1313,7 +1324,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 stringifiedObject = stringifyObject(object);
                 localStorage.setItem("savesInformations", stringifiedObject);
                 sortSaves();
-                createToast("toastError", "Przekroczono limit ostatni zapis został usunięty");
+                createToast("toastError", "Przekroczono limit zapisów ostatni zapis został usunięty");
             }
         }
     }
@@ -1333,7 +1344,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 stringifiedObject = stringifyObject(object);
                 localStorage.setItem("galleryInformations", stringifiedObject);
                 sortGallery();
-                createToast("toastError", "Przekroczono limit ostatni zapis został usunięty");
+                createToast("toastError", "Przekroczono limit zjęć ostatnie zdjęcie zostało usunięte");
             }
         }
     }
@@ -1495,7 +1506,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let btn1 = document.querySelector("#btn1"); //zastosuj
     let levelHTML = document.querySelector(".level"); // Obecny poziom:
     let timer = undefined; //Interwał
-    let refreshButton = document.querySelector(".refreshButton");
+    let refreshButton = document.querySelector(".refreshButton"); //Guzik przy canvasie do wygenerowania labiryntu
 
     let widocznosc = document.querySelector("#utrudnienia1");
     let widocznoscValue = 0;
@@ -1532,10 +1543,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let historia = document.querySelector(".historia"); //Sekcja z zapisami gier
     let hideHistory = document.querySelector("#hideHistory"); //ukrywanie histori gier
     let punkty = 0; //punkty w zapisie gry
-    let saves = [];
+    let saves = []; //zapisy gier
     let sortContainer = document.querySelectorAll(".sortContainer");
     let sortBy = document.querySelector("#sortBy");
     let sortByMode = document.querySelector("#sortByMode");
+    let searchContainer = document.querySelectorAll(".searchContainer");
     let search1 = document.querySelector("#search");
 
     let blockMovement = false; //blokowanie poruszania się
@@ -1827,11 +1839,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (event.target.id == "saveBtn") {
             let saveBtn = [...document.querySelectorAll("#saveBtn")];
             let partsSave = saveBtn.indexOf(event.target);
-            if (!saves[partsSave].isCustom) {
-                importFromObject(saves, partsSave, false);
-            } else {
-                createToast("toastError", "Własnych gier nie można wczytywać");
-            }
+            importFromObject(saves, partsSave, false);
         }
     });
 
@@ -1856,12 +1864,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (event.target.className == "mazeFromImg") {
             let mazeFromImg = [...document.querySelectorAll(".mazeFromImg")];
             let partsMazeFromImg = mazeFromImg.indexOf(event.target);
-
-            if (listOfImages[partsMazeFromImg].imageGeneration != "Custom") {
-                importFromObject(listOfImages, partsMazeFromImg, false);
-            } else {
-                createToast("toastError", "Własnych gier nie można wczytywać");
-            }
+            importFromObject(listOfImages, partsMazeFromImg, false);
         } else if (event.target.className == "overlay" || event.target.tagName == "SPAN") {
             let imageContainer = document.querySelectorAll(".imageContainer");
             for (let i = 0; i < listOfImages.length; i++) {
@@ -2028,4 +2031,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-//wersja (korkociąg 14)
+//wersja (korkociąg 15)
