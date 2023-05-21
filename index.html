@@ -32,7 +32,7 @@
         <nav class="menu">
             <button class="menuBtn" aria-label="Menu" aria-expanded="false">
                 <span aria-hidden="true"></span>
-                <div class="hoverToggle"></div>
+                <i class="hoverToggle"></i>
             </button>
             <ul class="menuBox">
                 <li class="menuItem"><button id="deleteLocalStorage">Wyczyść Local Storage</button></li>
@@ -58,7 +58,7 @@
                 <span class="time">Czas spędzony na poziomie:</span>
             </div>
             <div class="site">
-                <div>
+                <div class="canvasContainer">
                     <div class="canvas" id="gameContainer">
                         <canvas class="game" width="1000" height="1000" id="game"></canvas>
                     </div>
@@ -308,6 +308,21 @@
                 </div>
                 <section class="historia">
                     <h3>Historia gier:</h3>
+                    <div class="sortContainer">
+                        <label for="sortBy">Sortuj według</label>
+                        <select name="sortBY" id="sortBy">
+                            <option value="byIndex">Numeracji</option>
+                            <option value="byDifficulty">Trudności</option>
+                            <option value="byGeneration">Trybu generowania</option>
+                            <option value="byTime">Czasu</option>
+                            <option value="byMoves">Liczby ruchów</option>
+                            <option value="byScore">Punktów</option>
+                        </select>
+                        <select name="sortByMode" id="sortByMode">
+                            <option value="ASC">ASC</option>
+                            <option value="DESC">DESC</option>
+                        </select>
+                    </div>
                     <div class="content"></div>
                 </section>
                 <hr />
@@ -412,7 +427,7 @@
                     </div>
                 </section>
                 <hr />
-                <section id="gallerySection">
+                <div id="gallerySection">
                     <div class="flex-column">
                         <span class="headerLike">Galeria</span>
                         <div>
@@ -425,7 +440,21 @@
                             </label>
                         </div>
                     </div>
-                    <div class="gallery"></div>
+                    <div class="galleryContainer">
+                        <div class="sortContainer">
+                            <label for="sortBy2">Sortuj według</label>
+                            <select name="sortBy2" id="sortBy2">
+                                <option value="byIndex">Numeracji</option>
+                                <option value="byDifficulty">Trudności</option>
+                                <option value="byGeneration">Trybu generowania</option>
+                            </select>
+                            <select name="sortBy2Mode" id="sortBy2Mode">
+                                <option value="ASC">ASC</option>
+                                <option value="DESC">DESC</option>
+                            </select>
+                        </div>
+                        <div class="gallery"></div>
+                    </div>
                     <dialog class="popupImages">
                         <div class="imgWrapper">
                             <button class="offButton" aria-label="Zamknij galerie">&times;</button>
@@ -434,7 +463,7 @@
                             <img src="//:0" alt="Obecne zdjęcie" />
                         </div>
                     </dialog>
-                </section>
+                </div>
             </div>
         </main>
     </body>

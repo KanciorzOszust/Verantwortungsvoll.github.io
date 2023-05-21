@@ -14,7 +14,7 @@
         transform: translateX(-5%);
     }
     80% {
-        transform: translateX(0%);
+        transform: translateX(0);
     }
     100% {
         transform: translateX(-0.625rem);
@@ -25,7 +25,7 @@
         transform: translateX(-0.625rem);
     }
     40% {
-        transform: translateX(0%);
+        transform: translateX(0);
     }
     80% {
         transform: translateX(-5%);
@@ -36,7 +36,7 @@
 }
 @keyframes progress {
     100% {
-        width: 0%;
+        width: 0;
     }
 }
 @keyframes showError {
@@ -88,12 +88,12 @@
         transform: translateY(100%);
     }
     100% {
-        transform: translateY(0%);
+        transform: translateY(0);
     }
 }
 @keyframes fromTopToBottom {
     0% {
-        transform: translateY(0%);
+        transform: translateY(0);
     }
     100% {
         transform: translateY(150%);
@@ -112,11 +112,11 @@
     --spanAfterRotate: rotate(0deg);
     --spanBeforeTop: 0.5rem;
     --spanAfterTop: -0.5rem;
-    --warningBoxAnimation: ;
+    --warningBoxAnimation: none;
     --warningBoxAnimationTop: 1%;
-    --performaceBoxAnimation: ;
+    --performaceBoxAnimation: none;
     --popupImageBackground: #fff;
-    --localStorageAnimation: ;
+    --localStorageAnimation: none;
 }
 @supports selector(::-webkit-scrollbar) and selector(::-webkit-scrollbar-track) and selector(::-webkit-scrollbar-thumb) {
     ::-webkit-scrollbar-thumb:hover {
@@ -136,9 +136,6 @@
 }
 * {
     font-family: "Poppins", sans-serif;
-}
-*:focus {
-    outline: 2px black solid;
 }
 .displayNone {
     display: none !important;
@@ -194,6 +191,9 @@ hr {
     display: flex;
     flex-direction: column;
 }
+.canvasContainer {
+    margin: 10% 0;
+}
 .canvas {
     animation-duration: 2s;
     animation-fill-mode: forwards;
@@ -201,7 +201,6 @@ hr {
     display: flex;
     justify-content: center;
     opacity: 0;
-    margin: 10% 0;
 }
 .refreshButton {
     border-radius: 100%;
@@ -386,10 +385,9 @@ input[type="checkbox"]:focus {
     border: 0.0625rem var(--small-shadow) solid;
     box-shadow: 0.0625rem 0.0625rem 0.3125rem var(--big-shadow);
     display: flex;
-    font-size: 1.17rem;
+    font-size: 1rem;
     margin: 0.625rem;
     padding: 0.625rem;
-    width: auto;
 }
 .part:hover {
     border: 0.0625rem #f00 solid;
@@ -408,7 +406,7 @@ input[type="checkbox"]:focus {
     line-height: 0;
     margin: 0 1rem;
 }
-#rotate {
+select {
     background-color: #fff;
     border-radius: 0.3125rem;
     border: 0.125rem solid #ccc;
@@ -416,19 +414,19 @@ input[type="checkbox"]:focus {
     color: #555;
     font-family: Arial, sans-serif;
     font-size: 1rem;
-    margin-right: 0.625rem;
+    margin: 0 0.625rem;
     padding: 0.625rem;
-    width: 12.5rem;
+    width: auto;
 }
-#rotate:hover {
+select:hover {
     border-color: #aaa;
 }
-#rotate:focus {
+select:focus {
     border-color: #66afe9;
     box-shadow: 0 0 0.3125rem rgba(102, 175, 233, 0.5);
     outline: none;
 }
-#rotate option {
+.select option {
     font-size: 1rem;
     padding: 0.625rem;
 }
@@ -455,7 +453,7 @@ input[type="checkbox"]:focus {
     align-items: center;
     display: flex;
 }
-.notifications .toast {
+.toast {
     animation: showToast 0.3s ease forwards;
     background: #fff;
     border-radius: 0.25rem;
@@ -469,7 +467,7 @@ input[type="checkbox"]:focus {
     position: relative;
     width: 40vw;
 }
-.notifications .toast.hide {
+.toast.hide {
     animation: deleteToast 0.3s ease forwards;
 }
 .toast::before {
@@ -528,6 +526,7 @@ input[type="checkbox"]:focus {
 }
 .menuBtn > span {
     transform: var(--spanRotate);
+    left: -0.0625rem;
 }
 .menuBtn > span::before {
     content: "";
@@ -539,6 +538,7 @@ input[type="checkbox"]:focus {
     transform: var(--spanAfterRotate);
 }
 .menuBox {
+    -webkit-backdrop-filter: blur(0.3125rem);
     backdrop-filter: blur(0.3125rem);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     box-shadow: 0.125rem 0.125rem 0.375rem var(--big-shadow);
@@ -621,9 +621,9 @@ input[type="checkbox"]:focus {
 .hoverToggle {
     border-radius: 100%;
     height: 2.5rem;
-    left: -2.5px;
+    left: -8px;
     position: absolute;
-    top: -8px;
+    top: -0.4375rem;
     width: 2.5rem;
 }
 .menuBtn:hover .hoverToggle,
@@ -684,11 +684,15 @@ input[type="checkbox"]:focus {
 .headerLike {
     font-size: 4rem;
     font-weight: bold;
+    text-align: center;
+}
+.gallery,
+.galleryContainer {
+    width: 99vw;
 }
 .gallery {
     display: flex;
     flex-wrap: wrap;
-    width: 99vw;
 }
 .imageContainer {
     height: 25%;
@@ -697,6 +701,12 @@ input[type="checkbox"]:focus {
 }
 .gallery img {
     width: 100%;
+}
+.sortContainer {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.625rem;
 }
 .overlay {
     align-items: center;
@@ -722,7 +732,7 @@ input[type="checkbox"]:focus {
 .mazeFromImg {
     bottom: 5%;
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     position: absolute;
 }
 .removeImg {
@@ -810,10 +820,21 @@ dialog {
     top: 0.1563rem;
 }
 @media only screen and (max-width: 1500px) {
+    .content,
+    .part {
+        justify-content: center;
+        width: auto;
+    }
+    .content {
+        display: inline-flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 98vw;
+    }
     .part {
         align-items: center;
         flex-direction: column;
-        justify-content: center;
+        min-height: 13.125rem;
     }
     .deleteBtn {
         margin-left: 0;
@@ -831,8 +852,7 @@ dialog {
     .control {
         display: flex;
     }
-    #modes1,
-    #customModes1z h2,
+    #customModes h2,
     .infoPC,
     .container-info,
     .informationDesktop,
@@ -866,13 +886,17 @@ dialog {
     }
 }
 @media only screen and (max-width: 500px) {
+    #customModes1 div:last-child,
+    #modes1 div:last-child {
+        display: none;
+    }
     h1,
     .headerLike,
     .removeImg {
         font-size: 1.5rem;
     }
     .game {
-        width: 90%;
+        width: 80%;
     }
     #utrudnienia label,
     #utrudnienia span,
@@ -897,14 +921,22 @@ dialog {
         scroll-snap-type: y mandatory;
     }
     .part {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         scroll-snap-align: start;
+    }
+    .toast {
+        width: 80vw;
     }
     .gallery {
         height: 100vw;
         overflow: auto;
         scroll-snap-type: y mandatory;
         width: 100vw;
+    }
+    .sortContainer,
+    .sortContainer select {
+        font-size: 12px;
+        margin: 4px 1px;
     }
     .imageContainer {
         height: 100%;
