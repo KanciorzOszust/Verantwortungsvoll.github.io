@@ -615,6 +615,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 levelHTML.innerText = "OBECNY POZIOM: ";
                 importedCustomGameWin = false;
                 allowOperations = false;
+
+                pseudoMultipliers = [];
+                multipliers = [];
+                finalMultiplier = 1;
+                widocznoscValue = widocznosc.value;
+                niewidocznyKoniecValue = niewidocznyKoniec.checked;
+                odwroconeSterowanieValue = odwroconeSterowanie.checked;
+                niewidoczneScianyValue = niewidoczneSciany.checked;
+                niewidocznyGraczValue = niewidocznyGracz.checked;
+                if (losowyKoniec.checked) multipliers.push(1.1);
+                if (niewidoczneScianyValue) multipliers.push(2);
+                if (niewidocznyKoniecValue) multipliers.push(1.2);
+                if (odwroconeSterowanieValue && obrotCanvasa.value != 180) multipliers.push(1.4);
+                if (niewidocznyGraczValue) multipliers.push(2);
+                if (obrotCanvasa.value != 0) {
+                    multipliers.push(parseFloat(obrotCanvasa[obrotCanvasa.value / 45].dataset.pkt));
+                    if (obrotCanvasa.value == 180 && odwroconeSterowanieValue) multipliers.pop();
+                }
+                canvasMain.style.transform = "rotate(" + obrotCanvasa.value + "deg)";
+                if (widocznoscValue != 0 && (1 / widocznoscValue) * 10 >= 1) multipliers.push((1 / widocznoscValue) * 10);
+                else multipliers.push(1);
+                for (let i = 0; i < multipliers.length; i++) {
+                    finalMultiplier *= multipliers[i];
+                }
+                mnoznik.innerText = `OBENCY MNOŻNIK PUNKTÓW: ${finalMultiplier}`;
+
                 if (importedCustomGame == undefined) {
                     if (modes[0].checked) {
                         gra = new Canvas(10, 10);
@@ -666,34 +692,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 gracz.render();
                 gra.drawWalls(ctx);
                 if (!disableGallery.checked) addToGallery();
-                pseudoMultipliers = [];
-                multipliers = [];
-                finalMultiplier = 1;
 
-                widocznoscValue = widocznosc.value;
-                niewidocznyKoniecValue = niewidocznyKoniec.checked;
-                odwroconeSterowanieValue = odwroconeSterowanie.checked;
-                niewidoczneScianyValue = niewidoczneSciany.checked;
-                niewidocznyGraczValue = niewidocznyGracz.checked;
-                if (losowyKoniec.checked) multipliers.push(1.1);
-                if (niewidoczneScianyValue) multipliers.push(2);
-                if (niewidocznyKoniecValue) multipliers.push(1.2);
-                if (odwroconeSterowanieValue && obrotCanvasa.value != 180) multipliers.push(1.4);
-                if (niewidocznyGraczValue) multipliers.push(2);
-
-                if (obrotCanvasa.value != 0) {
-                    multipliers.push(parseFloat(obrotCanvasa[obrotCanvasa.value / 45].dataset.pkt));
-                    if (obrotCanvasa.value == 180 && odwroconeSterowanieValue) multipliers.pop();
-                }
-                canvasMain.style.transform = "rotate(" + obrotCanvasa.value + "deg)";
-                if (widocznoscValue != 0 && (1 / widocznoscValue) * 10 >= 1) multipliers.push((1 / widocznoscValue) * 10);
-                else multipliers.push(1);
-                for (let i = 0; i < multipliers.length; i++) {
-                    finalMultiplier *= multipliers[i];
-                }
-                mnoznik.innerText = `OBENCY MNOŻNIK PUNKTÓW: ${finalMultiplier}`;
                 importedCustomGame = undefined;
-
                 modifiedPlayerX = gracz.x;
                 modifiedPlayerY = gracz.y;
                 modifiedPlayerEndX = gracz.endPositionX;
@@ -728,8 +728,8 @@ document.addEventListener("DOMContentLoaded", function () {
         listOfImages.push({
             imageNumber: gameIndex,
             imageSrc: image,
-            gameDifficulty: modesMode,
-            imageGeneration: trybyMode,
+            gameDifficulty: modesMode.toLowerCase(),
+            imageGeneration: trybyMode.toLowerCase(),
             gra: gra,
             gracz: gracz,
             playerX: gracz.size,
@@ -744,14 +744,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateGallery() {
+        if (listOfImages.length != 0) sortContainer[1].classList.remove("displayNone");
+        else sortContainer[1].classList.add("displayNone");
         gallery.innerHTML = "";
         listOfImages.forEach(function (el) {
             gallery.innerHTML += `<div class="imageContainer">
                                     <img src="${el.imageSrc}" alt="Zdjęcie labiryntu ${el.imageGeneration}" >
                                     <div class="overlay" tabindex="0">
                                         <span>${el.imageNumber}</span>
-                                        <span>${el.gameDifficulty}</span>
-                                        <span>${el.imageGeneration}</span>
+                                        <span>${el.gameDifficulty.charAt(0).toUpperCase() + el.gameDifficulty.slice(1)}</span>
+                                        <span>${el.imageGeneration.charAt(0).toUpperCase() + el.imageGeneration.slice(1)}</}</span>
                                         <button class="removeImg" aria-label="Usuń zdjęcie">&times;</button>
                                         <button class="mazeFromImg" title="Wczytaj" aria-label="Wczytaj labiryn ze zdjęcia">&#8681;</button>
                                     </div>
@@ -772,6 +774,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         if (sortBy2Mode.value == "DESC") listOfImages.reverse();
         updateGallery();
+        search(document.querySelectorAll(".imageContainer"), listOfImages, search2.value);
+    }
+
+    function search(cards, obj, searchValue) {
+        cards.forEach(function (e) {
+            e.classList.add("displayNone");
+        });
+        for (let i = 0; i < obj.length; i++) {
+            for (let i2 = 0; i2 < Object.values(obj[i]).length; i2++) {
+                if ((typeof Object.values(obj[i])[i2] == "string" && Object.values(obj[i])[i2].indexOf(searchValue.toLowerCase()) >= 0) || (typeof Object.values(obj[i])[i2] == "number" && Object.values(obj[i])[i2] == searchValue)) {
+                    cards[i].classList.remove("displayNone");
+                }
+            }
+        }
     }
 
     function checkArrow(currentParentIndex) {
@@ -818,8 +834,8 @@ document.addEventListener("DOMContentLoaded", function () {
             currentRandomEndPos: [gracz.endPositionX, gracz.endPositionY],
             isCustom: importedCustomGameWin,
             gameNumber: gameHistoryIndex,
-            gameDifficulty: modesMode,
-            gameGenerationMode: trybyMode,
+            gameDifficulty: modesMode.toLowerCase(),
+            gameGenerationMode: trybyMode.toLowerCase(),
             timeM: m,
             timeS: sec,
             playerMoves: numberOfMoves,
@@ -852,12 +868,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateSaves() {
+        if (saves.length != 0) sortContainer[0].classList.remove("displayNone");
+        else sortContainer[0].classList.add("displayNone");
         gameHistory.innerHTML = "";
         saves.forEach(function (el) {
             let part = `<div class="part" style="background-color: ${el.color}">
                             <span>Gra numer: ${el.gameNumber} | </span> 
-                            <span>Poziom trudności: ${el.gameDifficulty} | </span>
-                            <span>Tryb generowania: ${el.gameGenerationMode} | </span>
+                            <span>Poziom trudności: ${el.gameDifficulty.charAt(0).toUpperCase() + el.gameDifficulty.slice(1)} | </span>
+                            <span>Tryb generowania: ${el.gameGenerationMode.charAt(0).toUpperCase() + el.gameGenerationMode.slice(1)} | </span>
                             <span>czas: minuty: ${el.timeM} sekundy: ${el.timeS} | </span> 
                             <span>Licba Ruchów ${el.playerMoves} | </span> 
                             <span>PUNKTY: ${el.points}</span>
@@ -888,6 +906,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         if (sortByMode.value == "DESC") saves.reverse();
         updateSaves();
+        search(document.querySelectorAll(".part"), saves, search1.value);
     }
 
     async function endingFunction() {
@@ -1514,8 +1533,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let hideHistory = document.querySelector("#hideHistory"); //ukrywanie histori gier
     let punkty = 0; //punkty w zapisie gry
     let saves = [];
+    let sortContainer = document.querySelectorAll(".sortContainer");
     let sortBy = document.querySelector("#sortBy");
     let sortByMode = document.querySelector("#sortByMode");
+    let search1 = document.querySelector("#search");
 
     let blockMovement = false; //blokowanie poruszania się
 
@@ -1593,6 +1614,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let hasEventListener = false;
     let sortBy2 = document.querySelector("#sortBy2");
     let sortBy2Mode = document.querySelector("#sortBy2Mode");
+    let search2 = document.querySelector("#search2");
 
     let localStoragePopup = document.querySelector(".localStorage");
     let declineLocalStorage = document.querySelector("#declineLocalStorage");
@@ -1802,7 +1824,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sortSaves();
             updateLocalStorageSavesInformations();
             createToast("toastInfo", "Zapis został pomyślnie usunięty");
-        } else if ((event.target.id = "saveBtn")) {
+        } else if (event.target.id == "saveBtn") {
             let saveBtn = [...document.querySelectorAll("#saveBtn")];
             let partsSave = saveBtn.indexOf(event.target);
             if (!saves[partsSave].isCustom) {
@@ -1815,6 +1837,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sortBy.addEventListener("change", sortSaves);
     sortByMode.addEventListener("change", sortSaves);
+    search1.addEventListener("keyup", function () {
+        search(document.querySelectorAll(".part"), saves, search1.value);
+    });
 
     gallery.addEventListener("click", function (event) {
         if (event.target.className == "removeImg") {
@@ -1878,6 +1903,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sortBy2.addEventListener("change", sortGallery);
     sortBy2Mode.addEventListener("change", sortGallery);
+    search2.addEventListener("keyup", function () {
+        search(document.querySelectorAll(".imageContainer"), listOfImages, search2.value);
+    });
 
     removePopupImage.addEventListener("click", function () {
         popupImagesContainer.close();
@@ -2000,4 +2028,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-//wersja (korkociąg 13)
+//wersja (korkociąg 14)

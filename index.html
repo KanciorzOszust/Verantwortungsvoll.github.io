@@ -308,7 +308,7 @@
                 </div>
                 <section class="historia">
                     <h3>Historia gier:</h3>
-                    <div class="sortContainer">
+                    <div class="sortContainer displayNone">
                         <label for="sortBy">Sortuj według</label>
                         <select name="sortBY" id="sortBy">
                             <option value="byIndex">Numeracji</option>
@@ -318,10 +318,13 @@
                             <option value="byMoves">Liczby ruchów</option>
                             <option value="byScore">Punktów</option>
                         </select>
-                        <select name="sortByMode" id="sortByMode">
+                        <select name="sortByMode" id="sortByMode" aria-label="Tryb sortowania">
                             <option value="ASC">ASC</option>
                             <option value="DESC">DESC</option>
                         </select>
+                    </div>
+                    <div class="searchContainer">
+                        <input type="text" name="search" id="search" placeholder="Wyszukaj z pośród zapisów" aria-label="Wyszukaj z pośród zapisów" />
                     </div>
                     <div class="content"></div>
                 </section>
@@ -441,17 +444,20 @@
                         </div>
                     </div>
                     <div class="galleryContainer">
-                        <div class="sortContainer">
+                        <div class="sortContainer displayNone">
                             <label for="sortBy2">Sortuj według</label>
                             <select name="sortBy2" id="sortBy2">
                                 <option value="byIndex">Numeracji</option>
                                 <option value="byDifficulty">Trudności</option>
                                 <option value="byGeneration">Trybu generowania</option>
                             </select>
-                            <select name="sortBy2Mode" id="sortBy2Mode">
+                            <select name="sortBy2Mode" id="sortBy2Mode" aria-label="Tryb sortowania">
                                 <option value="ASC">ASC</option>
                                 <option value="DESC">DESC</option>
                             </select>
+                        </div>
+                        <div class="searchContainer">
+                            <input type="text" name="search2" id="search2" placeholder="Wyszukaj z pośród zdjęć" aria-label="Wyszukaj z pośród zdjęć" />
                         </div>
                         <div class="gallery"></div>
                     </div>

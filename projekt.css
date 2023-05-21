@@ -406,13 +406,14 @@ input[type="checkbox"]:focus {
     line-height: 0;
     margin: 0 1rem;
 }
-select {
+select,
+input[type="number"],
+input[type="text"] {
     background-color: #fff;
     border-radius: 0.3125rem;
     border: 0.125rem solid #ccc;
     box-shadow: 0 0.125rem 0.125rem var(--small-shadow);
     color: #555;
-    font-family: Arial, sans-serif;
     font-size: 1rem;
     margin: 0 0.625rem;
     padding: 0.625rem;
@@ -702,11 +703,17 @@ select:focus {
 .gallery img {
     width: 100%;
 }
-.sortContainer {
+.sortContainer,
+.searchContainer {
     align-items: center;
     display: flex;
-    justify-content: flex-end;
     margin-bottom: 0.625rem;
+}
+.sortContainer {
+    justify-content: flex-end;
+}
+.searchContainer {
+    justify-content: center;
 }
 .overlay {
     align-items: center;
