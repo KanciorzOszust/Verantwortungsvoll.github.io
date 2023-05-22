@@ -31,16 +31,16 @@
         </div>
         <nav class="menu">
             <button class="menuBtn" aria-label="Menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
+                <span></span>
                 <i class="hoverToggle"></i>
             </button>
-            <ul class="menuBox">
+            <ul class="menuBox" aria-hidden="true">
                 <li class="menuItem"><button id="deleteLocalStorage">Wyczyść Local Storage</button></li>
                 <li class="menuItem"><a class="menuA" href="#game">Gra</a></li>
                 <li class="menuItem"><a class="menuA" href="#game2">Kreator labiryntów</a></li>
                 <li class="menuItem"><a class="menuA" href="#gallerySection">Galeria</a></li>
                 <li class="menuItem">
-                    <div class="detailistInformations">
+                    <div class="detailistInformations" tabindex="0">
                         <span class="menuInnerBtn2">Informacje szczegółowe</span>
                         <div class="subDetailistInformations" id="ok">
                             <span></span>
@@ -58,256 +58,276 @@
                 <span class="time">Czas spędzony na poziomie:</span>
             </div>
             <div class="site">
-                <div>
-                    <div class="canvas" id="gameContainer">
-                        <canvas class="game" width="1000" height="1000" id="game"></canvas>
-                    </div>
-                    <div class="refreshContainer">
-                        <button class="refreshButton" title="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności" aria-label="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności">&#8634;</button>
-                        <div class="hoverToggle"></div>
-                    </div>
-                </div>
-                <div class="control">
-                    <button class="btn1" aria-label="Ruch w górę">&uarr;</button>
-                    <button class="btn1" aria-label="Ruch w lewo">&larr;</button>
-                    <button class="btn1" aria-label="Ruch w prawo">&darr;</button>
-                    <button class="btn1" aria-label="Ruch w dół">&rarr;</button>
-                </div>
-                <p class="infoPC">Do kontrolowania kulki używaj STRZAŁEK lub klawiszy W, S, A, D</p>
-                <button class="btn1" id="modifyMaze">Modyfikuj</button>
-                <button class="btn1" id="giveUp">Poddajesz się?</button>
-                <div class="hoverableElements">
-                    <div class="additionalOptions">
-                        <div class="checkboxOuterContainer">
-                            <label for="disableArrows">
-                                <span>Wyłącz ruch ekranu strzałkami</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="disableArrows" id="disableArrows" />
-                                    <i></i>
-                                </span>
-                            </label>
+                <section class="flex-column">
+                    <div class="canvasContainer">
+                        <div class="canvas" id="gameContainer">
+                            <canvas class="game" width="1000" height="1000" id="game"></canvas>
                         </div>
-                        <div>
-                            <label for="disableNotification">
-                                <span>Wyłącz powiadomienia</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="disableNotification" id="disableNotification" />
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
-                        <div>
-                            <label for="disableGallery">
-                                <span>Wyłącz aktualizowanie galerii</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="disableGallery" id="disableGallery" />
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
-                        <div>
-                            <label for="animatedSolve">
-                                <span>Animowane rozwiązywanie</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="animatedSolve" id="animatedSolve" />
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="animatedSolveDelayContainer">
-                            <label for="animatedSolveDelay">Czas pomiędzy ruchami</label>
-                            <input type="number" name="animatedSolveDelay" id="animatedSolveDelay" step="25" min="0" placeholder="czas w milisekundach" />
-                        </div>
-                        <div>
-                            <label for="animatedPlayer">
-                                <span>Animowane poruszanie się</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="animatedPlayer" id="animatedPlayer" />
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
-                        <div>
-                            <label for="animatedGeneration">
-                                <span>Animowane generowanie</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="animatedGeneration" id="animatedGeneration" />
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
-                        <div>
-                            <label for="speakingMode">
-                                <span>Informacje mówione</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="speakingMode" id="speakingMode" />
-                                    <i></i>
-                                </span>
-                            </label>
+                        <div class="refreshContainer">
+                            <button class="refreshButton" title="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności" aria-label="Wygenerowanie labiryntu na podstawie wybranego trybu i trudności">&#8634;</button>
+                            <div class="hoverToggle"></div>
                         </div>
                     </div>
-                </div>
-                <span class="level">Obecny poziom:</span>
-                <h2 class="levelHeader">Wybierz poziom</h2>
-                <div class="hoverableElements">
-                    <div class="flex" id="modes1">
-                        <div>
-                            <label for="mode1">Łatwy</label>
-                            <input type="radio" name="mode" id="mode1" />
-                        </div>
-                        <div>
-                            <label for="mode2" class="mode2label">Średni</label>
-                            <input type="radio" name="mode" id="mode2" class="mode2" />
-                        </div>
-                        <div>
-                            <label for="mode3" class="mode3label">Trudny</label>
-                            <input type="radio" name="mode" id="mode3" class="mode3" />
-                        </div>
+                    <div class="control">
+                        <button class="btn1" aria-label="Ruch w górę">&uarr;</button>
+                        <button class="btn1" aria-label="Ruch w lewo">&larr;</button>
+                        <button class="btn1" aria-label="Ruch w prawo">&darr;</button>
+                        <button class="btn1" aria-label="Ruch w dół">&rarr;</button>
                     </div>
-                </div>
-                <h2>Wybierz tryb generowania</h2>
-                <div class="hoverableElements">
-                    <div class="flex" id="modes2">
-                        <div class="flex-column">
-                            <div>
-                                <label for="tryb1">DepthFirstSearch</label>
-                                <input type="radio" name="tryb" id="tryb1" />
-                            </div>
-                            <div>
-                                <img src="img/DepthFirstSearchExample.png" alt="Przykładowy labirynt DepthFirstSearch" />
-                            </div>
-                        </div>
-                        <div class="flex-column">
-                            <div>
-                                <label for="tryb2">Sidewinder</label>
-                                <input type="radio" name="tryb" id="tryb2" />
-                            </div>
-                            <div>
-                                <img src="img/SidewinderExample.png" alt="Przykładowy labirynt Sidewinder" />
-                            </div>
-                        </div>
-                        <div class="flex-column">
-                            <div>
-                                <label for="tryb3">Hunt-and-Kill</label>
-                                <input type="radio" name="tryb" id="tryb3" />
-                            </div>
-                            <div>
-                                <img src="img/HuntAndKillExample.png" alt="Przykładowy labirynt Hunt-and-Kill" />
-                            </div>
-                        </div>
-                        <div class="flex-column">
-                            <div>
-                                <label for="tryb4">Aldous-Broder</label>
-                                <input type="radio" name="tryb" id="tryb4" />
-                            </div>
-                            <div>
-                                <img src="img/AldousBroderExample.png" alt="Przykładowy labirynt Aldous-Broder" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <h2>Utrudnienia</h2>
-                <div id="utrudnienia">
+                    <p class="infoPC">Do kontrolowania kulki używaj STRZAŁEK lub klawiszy W, S, A, D</p>
+                    <button class="btn1" id="modifyMaze">Modyfikuj</button>
+                    <button class="btn1" id="giveUp">Poddajesz się?</button>
                     <div class="hoverableElements">
-                        <div class="ok">
-                            <div class="utrudnienia1-content">
-                                <label for="utrudnienia1">Widoczność</label>
-                                <input type="range" name="utrudnienia1" id="utrudnienia1" max="40" value="0" step="2" />
-                                <span class="wartosc"></span>
-                            </div>
-                            <div class="utrudnienia2-content">
-                                <label for="utrudnienia2">
-                                    <span>Losowy koniec</span>
+                        <div class="additionalOptions">
+                            <div class="checkboxOuterContainer">
+                                <label for="disableArrows">
+                                    <span>Wyłącz ruch ekranu strzałkami</span>
                                     <span class="checkboxContainer">
-                                        <input type="checkbox" name="utrudnienia2" id="utrudnienia2" />
+                                        <input type="checkbox" name="disableArrows" id="disableArrows" />
                                         <i></i>
                                     </span>
                                 </label>
-                                <span>Mnożnik: x1.1</span>
-                            </div>
-                            <i class="utrudnieniaInformation">We własnych grach może spowodować brak możliwości rozwiązania</i>
-                            <div class="utrudnienia3-content">
-                                <label for="utrudnienia3">
-                                    <span>Niewidoczny koniec</span>
-                                    <span class="checkboxContainer">
-                                        <input type="checkbox" name="utrudnienia3" id="utrudnienia3" />
-                                        <i></i>
-                                    </span>
-                                </label>
-                                <span>Mnożnik: x1.2</span>
-                            </div>
-                            <div class="utrudnienia4-content">
-                                <label for="utrudnienia4">
-                                    <span>Odwrócone sterowanie</span>
-                                    <span class="checkboxContainer">
-                                        <input type="checkbox" name="utrudnienia4" id="utrudnienia4" />
-                                        <i></i>
-                                    </span>
-                                </label>
-                                <span>Mnożnik: x1.4</span>
-                            </div>
-                            <div class="utrudnienia5-content">
-                                <label for="utrudnienia5">
-                                    <span>Niewidoczne ściany</span>
-                                    <span class="checkboxContainer">
-                                        <input type="checkbox" name="utrudnienia5" id="utrudnienia5" />
-                                        <i></i>
-                                    </span>
-                                </label>
-                                <span>Mnożnik: x2</span>
-                            </div>
-                            <div class="utrudnienia6-content">
-                                <label for="utrudnienia6">
-                                    <span>Niewidoczny gracz</span>
-                                    <span class="checkboxContainer">
-                                        <input type="checkbox" name="utrudnienia6" id="utrudnienia6" />
-                                        <i></i>
-                                    </span>
-                                </label>
-                                <span>Mnożnik: x2</span>
                             </div>
                             <div>
-                                <label for="rotate">Obrót canvasa</label>
-                                <select name="utrudnienia7" id="rotate" class="select">
-                                    <option value="0" data-pkt="1">0° - 1x</option>
-                                    <option value="45" data-pkt="1.2">45° - 1.2x</option>
-                                    <option value="90" data-pkt="2">90° - 2x</option>
-                                    <option value="135" data-pkt="2.2">135° - 2.2x</option>
-                                    <option value="180" data-pkt="2">180° - 2x</option>
-                                    <option value="225" data-pkt="2.5">225° - 2.5x</option>
-                                    <option value="270" data-pkt="2.5">270° - 2.5x</option>
-                                    <option value="315" data-pkt="1.3">315° - 1.3x</option>
-                                </select>
-                                <span>Mnożnik: zależny od wyboru</span>
+                                <label for="disableNotification">
+                                    <span>Wyłącz powiadomienia</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="disableNotification" id="disableNotification" />
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="disableGallery">
+                                    <span>Wyłącz aktualizowanie galerii</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="disableGallery" id="disableGallery" />
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="animatedSolve">
+                                    <span>Animowane rozwiązywanie</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="animatedSolve" id="animatedSolve" />
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="animatedSolveDelayContainer">
+                                <label for="animatedSolveDelay">Czas pomiędzy ruchami</label>
+                                <input type="number" name="animatedSolveDelay" id="animatedSolveDelay" step="25" min="0" placeholder="czas w milisekundach" />
+                            </div>
+                            <div>
+                                <label for="animatedPlayer">
+                                    <span>Animowane poruszanie się</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="animatedPlayer" id="animatedPlayer" />
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="animatedGeneration">
+                                    <span>Animowane generowanie</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="animatedGeneration" id="animatedGeneration" />
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="speakingMode">
+                                    <span>Informacje mówione</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="speakingMode" id="speakingMode" />
+                                        <i></i>
+                                    </span>
+                                </label>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <span class="mnoznik">Obecny mnożnik punktów: </span>
-                </div>
-                <div class="submit">
-                    <button class="btn1" id="btn1">Zastosuj</button>
-                </div>
-                <div class="flex">
-                    <button class="btn1" id="importFileBtn">Importuj gre z pliku txt</button>
-                </div>
-                <div class="importFileBtnContainer"></div>
-                <div class="hoverableElements">
-                    <div class="flex">
-                        <div class="hideHistoryContainer">
-                            <label for="hideHistory">
-                                <span>Ukryj historie</span>
-                                <span class="checkboxContainer">
-                                    <input type="checkbox" name="hideHistory" id="hideHistory" />
-                                    <i></i>
-                                </span>
-                            </label>
+                    <span class="level">Obecny poziom:</span>
+                    <h2 class="levelHeader">Wybierz poziom</h2>
+                    <div class="hoverableElements">
+                        <div class="flex" id="modes1">
+                            <div>
+                                <label for="mode1">Łatwy</label>
+                                <input type="radio" name="mode" id="mode1" />
+                            </div>
+                            <div>
+                                <label for="mode2" class="mode2label">Średni</label>
+                                <input type="radio" name="mode" id="mode2" class="mode2" />
+                            </div>
+                            <div>
+                                <label for="mode3" class="mode3label">Trudny</label>
+                                <input type="radio" name="mode" id="mode3" class="mode3" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <h2>Wybierz tryb generowania</h2>
+                    <div class="hoverableElements">
+                        <div class="flex" id="modes2">
+                            <div class="flex-column">
+                                <div>
+                                    <label for="tryb1">DepthFirstSearch</label>
+                                    <input type="radio" name="tryb" id="tryb1" />
+                                </div>
+                                <div>
+                                    <img src="img/DepthFirstSearchExample.png" alt="Przykładowy labirynt DepthFirstSearch" />
+                                </div>
+                            </div>
+                            <div class="flex-column">
+                                <div>
+                                    <label for="tryb2">Sidewinder</label>
+                                    <input type="radio" name="tryb" id="tryb2" />
+                                </div>
+                                <div>
+                                    <img src="img/SidewinderExample.png" alt="Przykładowy labirynt Sidewinder" />
+                                </div>
+                            </div>
+                            <div class="flex-column">
+                                <div>
+                                    <label for="tryb3">Hunt-and-Kill</label>
+                                    <input type="radio" name="tryb" id="tryb3" />
+                                </div>
+                                <div>
+                                    <img src="img/HuntAndKillExample.png" alt="Przykładowy labirynt Hunt-and-Kill" />
+                                </div>
+                            </div>
+                            <div class="flex-column">
+                                <div>
+                                    <label for="tryb4">Aldous-Broder</label>
+                                    <input type="radio" name="tryb" id="tryb4" />
+                                </div>
+                                <div>
+                                    <img src="img/AldousBroderExample.png" alt="Przykładowy labirynt Aldous-Broder" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Utrudnienia</h2>
+                    <div id="utrudnienia">
+                        <div class="hoverableElements">
+                            <div class="ok">
+                                <div class="utrudnienia1-content">
+                                    <label for="utrudnienia1">Widoczność</label>
+                                    <input type="range" name="utrudnienia1" id="utrudnienia1" max="40" value="0" step="2" />
+                                    <span class="wartosc"></span>
+                                </div>
+                                <div class="utrudnienia2-content">
+                                    <label for="utrudnienia2">
+                                        <span>Losowy koniec</span>
+                                        <span class="checkboxContainer">
+                                            <input type="checkbox" name="utrudnienia2" id="utrudnienia2" />
+                                            <i></i>
+                                        </span>
+                                    </label>
+                                    <span>Mnożnik: x1.1</span>
+                                </div>
+                                <i class="utrudnieniaInformation">Nie ma wpływu na własne gry</i>
+                                <div class="utrudnienia3-content">
+                                    <label for="utrudnienia3">
+                                        <span>Niewidoczny koniec</span>
+                                        <span class="checkboxContainer">
+                                            <input type="checkbox" name="utrudnienia3" id="utrudnienia3" />
+                                            <i></i>
+                                        </span>
+                                    </label>
+                                    <span>Mnożnik: x1.2</span>
+                                </div>
+                                <div class="utrudnienia4-content">
+                                    <label for="utrudnienia4">
+                                        <span>Odwrócone sterowanie</span>
+                                        <span class="checkboxContainer">
+                                            <input type="checkbox" name="utrudnienia4" id="utrudnienia4" />
+                                            <i></i>
+                                        </span>
+                                    </label>
+                                    <span>Mnożnik: x1.4</span>
+                                </div>
+                                <div class="utrudnienia5-content">
+                                    <label for="utrudnienia5">
+                                        <span>Niewidoczne ściany</span>
+                                        <span class="checkboxContainer">
+                                            <input type="checkbox" name="utrudnienia5" id="utrudnienia5" />
+                                            <i></i>
+                                        </span>
+                                    </label>
+                                    <span>Mnożnik: x2</span>
+                                </div>
+                                <div class="utrudnienia6-content">
+                                    <label for="utrudnienia6">
+                                        <span>Niewidoczny gracz</span>
+                                        <span class="checkboxContainer">
+                                            <input type="checkbox" name="utrudnienia6" id="utrudnienia6" />
+                                            <i></i>
+                                        </span>
+                                    </label>
+                                    <span>Mnożnik: x2</span>
+                                </div>
+                                <div>
+                                    <label for="rotate">Obrót canvasa</label>
+                                    <select name="utrudnienia7" id="rotate">
+                                        <option value="0" data-pkt="1">0° - 1x</option>
+                                        <option value="45" data-pkt="1.2">45° - 1.2x</option>
+                                        <option value="90" data-pkt="2">90° - 2x</option>
+                                        <option value="135" data-pkt="2.2">135° - 2.2x</option>
+                                        <option value="180" data-pkt="2">180° - 2x</option>
+                                        <option value="225" data-pkt="2.5">225° - 2.5x</option>
+                                        <option value="270" data-pkt="2.5">270° - 2.5x</option>
+                                        <option value="315" data-pkt="1.3">315° - 1.3x</option>
+                                    </select>
+                                    <span>Mnożnik: zależny od wyboru</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="mnoznik">Obecny mnożnik punktów: </span>
+                    </div>
+                    <div class="submit">
+                        <button class="btn1" id="btn1">Zastosuj</button>
+                    </div>
+                    <div class="flex">
+                        <button class="btn1" id="importFileBtn">Importuj gre z pliku txt</button>
+                    </div>
+                    <div class="importFileBtnContainer"></div>
+                    <div class="hoverableElements">
+                        <div class="flex">
+                            <div class="hideHistoryContainer">
+                                <label for="hideHistory">
+                                    <span>Ukryj historie</span>
+                                    <span class="checkboxContainer">
+                                        <input type="checkbox" name="hideHistory" id="hideHistory" />
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <section class="historia">
                     <h3>Historia gier:</h3>
+                    <div class="sortContainer displayNone" aria-hidden="true">
+                        <label for="sortBy">Sortuj według</label>
+                        <select name="sortBY" id="sortBy">
+                            <option value="byIndex">Numeracji</option>
+                            <option value="byDifficulty">Trudności</option>
+                            <option value="byGeneration">Trybu generowania</option>
+                            <option value="byTime">Czasu</option>
+                            <option value="byMoves">Liczby ruchów</option>
+                            <option value="byScore">Punktów</option>
+                        </select>
+                        <select name="sortByMode" id="sortByMode" aria-label="Tryb sortowania">
+                            <option value="ASC">ASC</option>
+                            <option value="DESC">DESC</option>
+                        </select>
+                    </div>
+                    <div class="searchContainer displayNone" aria-hidden="true">
+                        <input type="text" name="search" id="search" placeholder="Wyszukaj z pośród zapisów" aria-label="Wyszukaj z pośród zapisów" />
+                    </div>
                     <div class="content"></div>
                 </section>
                 <hr />
@@ -412,7 +432,7 @@
                     </div>
                 </section>
                 <hr />
-                <div id="gallerySection">
+                <section id="gallerySection">
                     <div class="flex-column">
                         <span class="headerLike">Galeria</span>
                         <div>
@@ -426,13 +446,20 @@
                         </div>
                     </div>
                     <div class="galleryContainer">
-                        <div class="sortContainer">
-                            <span>sortuj według</span>
-                            <select name="sortBy" id="sortBy" class="select">
+                        <div class="sortContainer displayNone" aria-hidden="true">
+                            <label for="sortBy2">Sortuj według</label>
+                            <select name="sortBy2" id="sortBy2">
                                 <option value="byIndex">Numeracji</option>
                                 <option value="byDifficulty">Trudności</option>
                                 <option value="byGeneration">Trybu generowania</option>
                             </select>
+                            <select name="sortBy2Mode" id="sortBy2Mode" aria-label="Tryb sortowania">
+                                <option value="ASC">ASC</option>
+                                <option value="DESC">DESC</option>
+                            </select>
+                        </div>
+                        <div class="searchContainer displayNone" aria-hidden="true">
+                            <input type="text" name="search2" id="search2" placeholder="Wyszukaj z pośród zdjęć" aria-label="Wyszukaj z pośród zdjęć" />
                         </div>
                         <div class="gallery"></div>
                     </div>
@@ -444,8 +471,9 @@
                             <img src="//:0" alt="Obecne zdjęcie" />
                         </div>
                     </dialog>
-                </div>
+                </section>
             </div>
         </main>
     </body>
 </html>
+<!-- wersja (korkociąg 15) -->

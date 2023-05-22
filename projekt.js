@@ -268,8 +268,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (animatedSolve.checked && time > 0) await sleep(time);
 
-                for (let j = 0; j < 4; j++) {
-                    let neighbour = facing[j];
+                for (let i2 = 0; i2 < 4; i2++) {
+                    let neighbour = facing[i2];
                     if (neighbour == undefined) continue;
                     if (currentPos[0] > neighbour.indexY && !this.maze[currentPos[0]][currentPos[1]].walls.wallN) {
                         possibleMoves.push(neighbour);
@@ -285,9 +285,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     } // w
                 }
                 let lowestIndex = 100;
-                for (let j = 0; j < possibleMoves.length; j++) {
-                    if (possibleMoves[j].visitedIndex < lowestIndex) {
-                        lowestIndex = possibleMoves[j].visitedIndex;
+                for (let i2 = 0; i2 < possibleMoves.length; i2++) {
+                    if (possibleMoves[i2].visitedIndex < lowestIndex) {
+                        lowestIndex = possibleMoves[i2].visitedIndex;
                     }
                 }
                 if (history.length > 0) {
@@ -305,10 +305,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 history.push(this.maze[currentPos[0]][currentPos[1]]);
-                for (let j = 0; j < 4; j++) {
-                    let tempj = j + orientation;
-                    if (tempj > 3) tempj -= 4;
-                    neighbour = facing[tempj];
+                for (let i2 = 0; i2 < 4; i2++) {
+                    let tempi2 = i2 + orientation;
+                    if (tempi2 > 3) tempi2 -= 4;
+                    neighbour = facing[tempi2];
                     if (neighbour == undefined) continue;
                     if (neighbour.visitedIndex > lowestIndex) continue;
                     if (possibleMoves.includes(neighbour)) {
@@ -615,21 +615,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 levelHTML.innerText = "OBECNY POZIOM: ";
                 importedCustomGameWin = false;
                 allowOperations = false;
+
+                pseudoMultipliers = [];
+                multipliers = [];
+                finalMultiplier = 1;
+                widocznoscValue = widocznosc.value;
+                niewidocznyKoniecValue = niewidocznyKoniec.checked;
+                odwroconeSterowanieValue = odwroconeSterowanie.checked;
+                niewidoczneScianyValue = niewidoczneSciany.checked;
+                niewidocznyGraczValue = niewidocznyGracz.checked;
+                if (losowyKoniec.checked) multipliers.push(1.1);
+                if (niewidoczneScianyValue) multipliers.push(2);
+                if (niewidocznyKoniecValue) multipliers.push(1.2);
+                if (odwroconeSterowanieValue && obrotCanvasa.value != 180) multipliers.push(1.4);
+                if (niewidocznyGraczValue) multipliers.push(2);
+                if (obrotCanvasa.value != 0) {
+                    multipliers.push(parseFloat(obrotCanvasa[obrotCanvasa.value / 45].dataset.pkt));
+                    if (obrotCanvasa.value == 180 && odwroconeSterowanieValue) multipliers.pop();
+                }
+                canvasMain.style.transform = "rotate(" + obrotCanvasa.value + "deg)";
+                if (widocznoscValue != 0 && (1 / widocznoscValue) * 10 >= 1) multipliers.push((1 / widocznoscValue) * 10);
+                else multipliers.push(1);
+                for (let i = 0; i < multipliers.length; i++) {
+                    finalMultiplier *= multipliers[i];
+                }
+                mnoznik.innerText = `OBENCY MNOŻNIK PUNKTÓW: ${finalMultiplier}`;
+
                 if (importedCustomGame == undefined) {
                     if (modes[0].checked) {
                         gra = new Canvas(10, 10);
                         gracz = new Player(50, 50, 50);
-                        modesMode = " Łatwy ";
+                        modesMode = "Łatwy";
                         punkty = 1000;
                     } else if (modes[1].checked) {
                         gra = new Canvas(20, 20);
                         gracz = new Player(25, 25, 25);
-                        modesMode = " Średni ";
+                        modesMode = "Średni";
                         punkty = 2000;
                     } else {
                         gra = new Canvas(40, 40);
                         gracz = new Player(12.5, 12.5, 12.5);
-                        modesMode = " Trudny ";
+                        modesMode = "Trudny";
                         punkty = 4000;
                     }
                     levelHTML.innerHTML = `<span>Obecny poziom: ${modesMode}</span>`;
@@ -663,39 +689,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 allowOperations = true;
-                constGame = [gra];
-                constPlayer = [gracz];
                 gracz.render();
                 gra.drawWalls(ctx);
                 if (!disableGallery.checked) addToGallery();
-                pseudoMultipliers = [];
-                multipliers = [];
-                finalMultiplier = 1;
 
-                widocznoscValue = widocznosc.value;
-                niewidocznyKoniecValue = niewidocznyKoniec.checked;
-                odwroconeSterowanieValue = odwroconeSterowanie.checked;
-                niewidoczneScianyValue = niewidoczneSciany.checked;
-                niewidocznyGraczValue = niewidocznyGracz.checked;
-                if (losowyKoniec.checked) multipliers.push(1.1);
-                if (niewidoczneScianyValue) multipliers.push(2);
-                if (niewidocznyKoniecValue) multipliers.push(1.2);
-                if (odwroconeSterowanieValue && obrotCanvasa.value != 180) multipliers.push(1.4);
-                if (niewidocznyGraczValue) multipliers.push(2);
-
-                if (obrotCanvasa.value != 0) {
-                    multipliers.push(parseFloat(obrotCanvasa[obrotCanvasa.value / 45].dataset.pkt));
-                    if (obrotCanvasa.value == 180 && odwroconeSterowanieValue) multipliers.pop();
-                }
-                canvasMain.style.transform = "rotate(" + obrotCanvasa.value + "deg)";
-                if (widocznoscValue != 0 && (1 / widocznoscValue) * 10 >= 1) multipliers.push((1 / widocznoscValue) * 10);
-                else multipliers.push(1);
-                for (let i = 0; i < multipliers.length; i++) {
-                    finalMultiplier *= multipliers[i];
-                }
-                mnoznik.innerText = `OBENCY MNOŻNIK PUNKTÓW: ${finalMultiplier}`;
                 importedCustomGame = undefined;
-
                 modifiedPlayerX = gracz.x;
                 modifiedPlayerY = gracz.y;
                 modifiedPlayerEndX = gracz.endPositionX;
@@ -730,8 +728,8 @@ document.addEventListener("DOMContentLoaded", function () {
         listOfImages.push({
             imageNumber: gameIndex,
             imageSrc: image,
-            gameDifficulty: modesMode,
-            imageGeneration: trybyMode,
+            gameDifficulty: modesMode.toLowerCase(),
+            imageGeneration: trybyMode.toLowerCase(),
             gra: gra,
             gracz: gracz,
             playerX: gracz.size,
@@ -746,14 +744,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateGallery() {
+        containersCSS(listOfImages, 1);
         gallery.innerHTML = "";
         listOfImages.forEach(function (el) {
             gallery.innerHTML += `<div class="imageContainer">
                                     <img src="${el.imageSrc}" alt="Zdjęcie labiryntu ${el.imageGeneration}" >
                                     <div class="overlay" tabindex="0">
                                         <span>${el.imageNumber}</span>
-                                        <span>${el.gameDifficulty}</span>
-                                        <span>${el.imageGeneration}</span>
+                                        <span>${el.gameDifficulty.charAt(0).toUpperCase() + el.gameDifficulty.slice(1)}</span>
+                                        <span>${el.imageGeneration.charAt(0).toUpperCase() + el.imageGeneration.slice(1)}</}</span>
                                         <button class="removeImg" aria-label="Usuń zdjęcie">&times;</button>
                                         <button class="mazeFromImg" title="Wczytaj" aria-label="Wczytaj labiryn ze zdjęcia">&#8681;</button>
                                     </div>
@@ -762,20 +761,46 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function sortGallery() {
-        if (sortBy.value == "byIndex") {
-            listOfImages.sort(function (a, b) {
-                return a.imageNumber - b.imageNumber;
-            });
-        } else if (sortBy.value == "byDifficulty") {
-            listOfImages.sort(function (a, b) {
-                return a.gameDifficulty.localeCompare(b.gameDifficulty);
-            });
-        } else {
-            listOfImages.sort(function (a, b) {
-                return a.imageGeneration.localeCompare(b.imageGeneration);
-            });
-        }
+        listOfImages.sort(function (a, b) {
+            switch (sortBy2.value) {
+                case "byIndex":
+                    return a.imageNumber - b.imageNumber;
+                case "byDifficulty":
+                    return a.gameDifficulty.localeCompare(b.gameDifficulty);
+                default:
+                    return a.imageGeneration.localeCompare(b.imageGeneration);
+            }
+        });
+        if (sortBy2Mode.value == "DESC") listOfImages.reverse();
         updateGallery();
+        search(document.querySelectorAll(".imageContainer"), listOfImages, search2.value);
+    }
+
+    function search(cards, obj, searchValue) {
+        cards.forEach(function (e) {
+            e.classList.add("displayNone");
+        });
+        for (let i = 0; i < obj.length; i++) {
+            for (let i2 = 0; i2 < Object.values(obj[i]).length; i2++) {
+                if ((typeof Object.values(obj[i])[i2] == "string" && Object.values(obj[i])[i2].indexOf(searchValue.toLowerCase()) >= 0) || (typeof Object.values(obj[i])[i2] == "number" && Object.values(obj[i])[i2] == searchValue)) {
+                    cards[i].classList.remove("displayNone");
+                }
+            }
+        }
+    }
+
+    function containersCSS(arr, i) {
+        if (arr.length != 0) {
+            sortContainer[i].classList.remove("displayNone");
+            searchContainer[i].classList.remove("displayNone");
+            sortContainer[i].setAttribute("aria-hidden", false);
+            searchContainer[i].setAttribute("aria-hidden", false);
+        } else {
+            sortContainer[i].classList.add("displayNone");
+            searchContainer[i].classList.add("displayNone");
+            sortContainer[i].setAttribute("aria-hidden", true);
+            searchContainer[i].setAttribute("aria-hidden", true);
+        }
     }
 
     function checkArrow(currentParentIndex) {
@@ -805,7 +830,7 @@ document.addEventListener("DOMContentLoaded", function () {
         punkty -= sec * 20;
         punkty -= m * 20 * 60;
         punkty *= finalMultiplier;
-        if (importedCustomGameWin) punkty = 0;
+        if (importedCustomGameWin || punkty < 0) punkty = 0;
         levelHTML.innerText = "OBECNY POZIOM:";
         ctx.clearRect(0, 0, cvs.width, cvs.height);
         clearInterval(timer);
@@ -820,10 +845,9 @@ document.addEventListener("DOMContentLoaded", function () {
             currentCellX: 0,
             currentCellY: 0,
             currentRandomEndPos: [gracz.endPositionX, gracz.endPositionY],
-            isCustom: importedCustomGameWin,
             gameNumber: gameHistoryIndex,
-            gameDifficulty: modesMode,
-            gameGenerationMode: trybyMode,
+            gameDifficulty: modesMode.toLowerCase(),
+            gameGenerationMode: trybyMode.toLowerCase(),
             timeM: m,
             timeS: sec,
             playerMoves: numberOfMoves,
@@ -833,7 +857,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (importedCustomGameWin) saves[saves.length - 1].color = "wheat";
         else if (!win) saves[saves.length - 1].color = "grey";
 
-        updateSaves();
+        sortSaves();
 
         gameHistoryIndex++;
         sec = 0;
@@ -856,12 +880,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateSaves() {
+        containersCSS(saves, 0);
         gameHistory.innerHTML = "";
         saves.forEach(function (el) {
             let part = `<div class="part" style="background-color: ${el.color}">
                             <span>Gra numer: ${el.gameNumber} | </span> 
-                            <span>Poziom trudności: ${el.gameDifficulty} | </span>
-                            <span>Tryb generowania: ${el.gameGenerationMode} | </span>
+                            <span>Poziom trudności: ${el.gameDifficulty.charAt(0).toUpperCase() + el.gameDifficulty.slice(1)} | </span>
+                            <span>Tryb generowania: ${el.gameGenerationMode.charAt(0).toUpperCase() + el.gameGenerationMode.slice(1)} | </span>
                             <span>czas: minuty: ${el.timeM} sekundy: ${el.timeS} | </span> 
                             <span>Licba Ruchów ${el.playerMoves} | </span> 
                             <span>PUNKTY: ${el.points}</span>
@@ -871,6 +896,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
             gameHistory.innerHTML += part;
         });
+    }
+
+    function sortSaves() {
+        saves.sort(function (a, b) {
+            switch (sortBy.value) {
+                case "byIndex":
+                    return a.gameNumber - b.gameNumber;
+                case "byDifficulty":
+                    return a.gameDifficulty.localeCompare(b.gameDifficulty);
+                case "byGeneration":
+                    return a.gameGenerationMode.localeCompare(b.gameGenerationMode);
+                case "byTime":
+                    return a.timeM - b.timeM || a.timeS - b.timeS;
+                case "byMoves":
+                    return a.playerMoves - b.playerMoves;
+                default:
+                    return a.points - b.points;
+            }
+        });
+        if (sortByMode.value == "DESC") saves.reverse();
+        updateSaves();
+        search(document.querySelectorAll(".part"), saves, search1.value);
     }
 
     async function endingFunction() {
@@ -1184,7 +1231,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function menuToggleCss(value1, value2, value3, value4, value5, value6, aria) {
+    function menuToggleCss(value1, value2, value3, value4, value5, value6, aria, aria2) {
         styles.style.setProperty("--menuBoxLeft", value1);
         styles.style.setProperty("--menuBoxVisibility", value2);
         styles.style.setProperty("--spanRotate", value3);
@@ -1192,6 +1239,7 @@ document.addEventListener("DOMContentLoaded", function () {
         styles.style.setProperty("--spanBeforeTop", value5);
         styles.style.setProperty("--spanAfterTop", value6);
         menuToggle.setAttribute("aria-expanded", aria);
+        menuBox.setAttribute("aria-hidden", aria2);
     }
 
     function warningBoxCss(animation, aria) {
@@ -1276,8 +1324,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 object.saves.pop();
                 stringifiedObject = stringifyObject(object);
                 localStorage.setItem("savesInformations", stringifiedObject);
-                updateSaves();
-                createToast("toastError", "Przekroczono limit ostatni zapis został usunięty");
+                sortSaves();
+                createToast("toastError", "Przekroczono limit zapisów ostatni zapis został usunięty");
             }
         }
     }
@@ -1297,7 +1345,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 stringifiedObject = stringifyObject(object);
                 localStorage.setItem("galleryInformations", stringifiedObject);
                 sortGallery();
-                createToast("toastError", "Przekroczono limit ostatni zapis został usunięty");
+                createToast("toastError", "Przekroczono limit zjęć ostatnie zdjęcie zostało usunięte");
             }
         }
     }
@@ -1355,7 +1403,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let savesInformations = JSON.parse(localStorage.getItem("savesInformations"));
         saves = savesInformations.saves;
         gameHistoryIndex = savesInformations.gameNumber;
-        updateSaves();
+        sortSaves();
     }
 
     function getLocalStorageGalleryInformations() {
@@ -1440,6 +1488,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let styles = document.querySelector(":root");
     let menuToggle = document.querySelector(".menuBtn"); //przełącznik menu
+    let menuBox = document.querySelector(".menuBox");
     let detailistInformations = document.querySelector(".subDetailistInformations span"); //Menu => informacje szczegółowe
 
     let time = document.querySelector(".time"); //Czas spędzony na poziomie:
@@ -1459,7 +1508,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let btn1 = document.querySelector("#btn1"); //zastosuj
     let levelHTML = document.querySelector(".level"); // Obecny poziom:
     let timer = undefined; //Interwał
-    let refreshButton = document.querySelector(".refreshButton");
+    let refreshButton = document.querySelector(".refreshButton"); //Guzik przy canvasie do wygenerowania labiryntu
 
     let widocznosc = document.querySelector("#utrudnienia1");
     let widocznoscValue = 0;
@@ -1496,7 +1545,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let historia = document.querySelector(".historia"); //Sekcja z zapisami gier
     let hideHistory = document.querySelector("#hideHistory"); //ukrywanie histori gier
     let punkty = 0; //punkty w zapisie gry
-    let saves = [];
+    let saves = []; //zapisy gier
+    let sortContainer = document.querySelectorAll(".sortContainer");
+    let sortBy = document.querySelector("#sortBy");
+    let sortByMode = document.querySelector("#sortByMode");
+    let searchContainer = document.querySelectorAll(".searchContainer");
+    let search1 = document.querySelector("#search");
 
     let blockMovement = false; //blokowanie poruszania się
 
@@ -1572,7 +1626,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let rightArrow = document.querySelector(".rightButton");
     let currentParentIndex = 0;
     let hasEventListener = false;
-    let sortBy = document.querySelector("#sortBy");
+    let sortBy2 = document.querySelector("#sortBy2");
+    let sortBy2Mode = document.querySelector("#sortBy2Mode");
+    let search2 = document.querySelector("#search2");
 
     let localStoragePopup = document.querySelector(".localStorage");
     let declineLocalStorage = document.querySelector("#declineLocalStorage");
@@ -1611,9 +1667,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     menuToggle.addEventListener("click", function () {
         if (getComputedStyle(styles).getPropertyValue("--menuBoxLeft") == "-100%") {
-            menuToggleCss("0", "visible", "rotate(45deg)", "rotate(90deg)", "0", "0", true);
+            menuToggleCss("0", "visible", "rotate(45deg)", "rotate(90deg)", "0", "0", true, false);
         } else {
-            menuToggleCss("-100%", "hidden", "rotate(0deg)", "rotate(0deg)", "-0.5rem", "0.5rem", false);
+            menuToggleCss("-100%", "hidden", "rotate(0deg)", "rotate(0deg)", "-0.5rem", "0.5rem", false, true);
         }
     });
 
@@ -1700,7 +1756,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (window.getComputedStyle(warningBox, null).top == "48.4375px") {
             styles.style.setProperty("--warningBoxAnimationTop", "1%");
         }
-        performancesIndex = 0;
+        performancesIndex = -5;
     });
 
     btn1.addEventListener("click", async function () {
@@ -1779,18 +1835,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 return i !== partsDelete;
             });
 
-            updateSaves();
+            sortSaves();
             updateLocalStorageSavesInformations();
             createToast("toastInfo", "Zapis został pomyślnie usunięty");
-        } else if ((event.target.id = "saveBtn")) {
+        } else if (event.target.id == "saveBtn") {
             let saveBtn = [...document.querySelectorAll("#saveBtn")];
             let partsSave = saveBtn.indexOf(event.target);
-            if (!saves[partsSave].isCustom) {
-                importFromObject(saves, partsSave, false);
-            } else {
-                createToast("toastError", "Własnych gier nie można wczytywać");
-            }
+            importFromObject(saves, partsSave, false);
         }
+    });
+
+    sortBy.addEventListener("change", sortSaves);
+    sortByMode.addEventListener("change", sortSaves);
+    search1.addEventListener("keyup", function () {
+        search(document.querySelectorAll(".part"), saves, search1.value);
     });
 
     gallery.addEventListener("click", function (event) {
@@ -1808,12 +1866,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (event.target.className == "mazeFromImg") {
             let mazeFromImg = [...document.querySelectorAll(".mazeFromImg")];
             let partsMazeFromImg = mazeFromImg.indexOf(event.target);
-
-            if (listOfImages[partsMazeFromImg].imageGeneration != "Custom") {
-                importFromObject(listOfImages, partsMazeFromImg, false);
-            } else {
-                createToast("toastError", "Własnych gier nie można wczytywać");
-            }
+            importFromObject(listOfImages, partsMazeFromImg, false);
         } else if (event.target.className == "overlay" || event.target.tagName == "SPAN") {
             let imageContainer = document.querySelectorAll(".imageContainer");
             for (let i = 0; i < listOfImages.length; i++) {
@@ -1853,7 +1906,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    sortBy.addEventListener("change", sortGallery);
+    sortBy2.addEventListener("change", sortGallery);
+    sortBy2Mode.addEventListener("change", sortGallery);
+    search2.addEventListener("keyup", function () {
+        search(document.querySelectorAll(".imageContainer"), listOfImages, search2.value);
+    });
 
     removePopupImage.addEventListener("click", function () {
         popupImagesContainer.close();
@@ -1868,13 +1925,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     scrollToGame.forEach(function (el) {
         el.addEventListener("click", function () {
-            styles.style.setProperty("--menuBoxLeft", "-100%");
-            styles.style.setProperty("--menuBoxVisibility", "hidden");
-            styles.style.setProperty("--spanRotate", "rotate(0deg)");
-            styles.style.setProperty("--spanAfterRotate", "rotate(0deg)");
-            styles.style.setProperty("--spanBeforeTop", "-0.5rem");
-            styles.style.setProperty("--spanAfterTop", "0.5rem");
-            menuToggle.setAttribute("aria-expanded", false);
+            menuToggleCss("-100%", "hidden", "rotate(0deg)", "rotate(0deg)", "-0.5rem", "0.5rem", false, true);
         });
     });
 
@@ -1976,4 +2027,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-//wersja (korkociąg 12)
+//wersja (korkociąg 15)
