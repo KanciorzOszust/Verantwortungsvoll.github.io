@@ -1,0 +1,9 @@
+* {
+    font-family: Poppins , sans-serif;
+}
+main,
+.main-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
